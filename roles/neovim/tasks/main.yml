@@ -1,0 +1,52 @@
+---
+- name: Create the Neovim configuration directory
+  ansible.builtin.file:
+    path: ~/.config/nvim
+    state: directory
+    mode: 0755
+
+- name: Copy the init file for Neovim
+  ansible.builtin.copy:
+    src: init.lua
+    dest: ~/.config/nvim/init.lua
+
+- name: Copy the configuration for Neovim
+  ansible.builtin.copy:
+    src: lua/
+    dest: ~/.config/nvim/lua
+
+- name: Install Packer plugin manager
+  ansible.builtin.git:
+    repo: https://github.com/wbthomason/packer.nvim.git
+    dest: ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+
+- name: Install and Setup Neovim (for the local user)
+  block:
+    - name: Download Neovim's AppImage 
+      ansible.builtin.get_url:
+        url: https://github.com/neovim/neovim/releases/download/v0.9.1/nvim.appimage
+        dest: ~/.local/bin/nvim.appimage
+        mode: 0755
+
+    - name: Link Neovim's AppImage
+      ansible.builtin.file:
+        src: ~/.local/bin/nvim.appimage
+        dest: ~/.local/bin/nvim
+        state: link
+  rescue:
+    - name: Silence Error
+      ansible.builtin.debug:
+        msg: "You'll have to manually install neovim. Good luck!"
+
+- name: Finalize Neovim setup
+  block:
+    - name: Install and Update Packer plugins
+      ansible.builtin.shell: |
+        ~/.local/bin/nvim --headless \
+          -c 'autocmd User PackerComplete quitall' \
+          -c 'PackerSync'
+  rescue:
+    - name: Silence Error
+      ansible.builtin.debug:
+        msg: "Packer will have to be synced/updated manually. ':PackerSync' ':PackerUpdate'"
+
