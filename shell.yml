@@ -1,0 +1,16 @@
+---
+- name: Setup CLI environment and associated tools
+  hosts: all
+  vars:
+    install_software: false
+
+  roles:
+    - role: zsh
+    - role: bash
+      when: '"bash" in ansible_user_shell'
+  
+    - role: neovim
+    - role: tmux
+
+
+

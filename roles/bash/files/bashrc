@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# If not running interactively, don't do anything
+case $- in
+  *i*) ;;
+    *) return;;
+esac
+  
+# Switch to zsh iff it's available, otherwise stay here.
+if command -v zsh &> /dev/null
+then
+    export SHELL=$(which zsh)
+    exec zsh -l
+fi
+
+# Sudo for the systems that manage it out of tree
+if [[ ! $HOSTNAME = kube* ]]; then
+    if [ -d "/apps/sudo/bin" ]; then
+        export PATH=/apps/sudo/bin:$PATH
+    fi
+fi
+
+# Manage VIM/NVIM Fallback
+if command -v nvim &> /dev/null; then
+    export EDITOR=$(which nvim)
+    alias vim=nvim
+else
+    export EDITOR=$(which vim)
+fi
+
+# Apparently, Git no longer uses EDITOR...
+export GIT_EDITOR=$EDITOR
+
+# Path to the bash it configuration
+export BASH_IT="$HOME/.local/share/shell/bash_it"
+
+# Lock and Load a custom theme file.
+# Leave empty to disable theming.
+# location /.bash_it/themes/
+export BASH_IT_THEME='candy'
+
+# Set this to false to turn off version control status checking within the prompt for all themes
+export SCM_CHECK=true
+
+# (Advanced): Uncomment this to make Bash-it reload itself automatically
+# after enabling or disabling aliases, plugins, and completions.
+export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=1
+
+# Load Bash It
+source "$BASH_IT"/bash_it.sh
+

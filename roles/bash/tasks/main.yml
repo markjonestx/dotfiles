@@ -1,0 +1,24 @@
+---
+- name: Create the directory where Bash-it will live
+  ansible.builtin.file:
+    dest: ~/.local/share/shell
+    state: directory
+    mode: 0755
+
+- name: Install Bash-it
+  ansible.builtin.git:
+    repo: https://github.com/Bash-it/bash-it.git
+    dest: ~/.local/share/shell/bash_it
+
+- name: Copy bashrc file
+  ansible.builtin.copy:
+    src: bashrc
+    dest: ~/.bashrc
+    mode: 0644
+
+- name: Copy bash_profile file
+  ansible.builtin.copy:
+    src: bash_profile
+    dest: ~/.bash_profile
+    mode: 0644
+
