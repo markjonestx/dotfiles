@@ -1,0 +1,32 @@
+---
+- name: Create tmux's configuration directory
+  ansible.builtin.file:
+    path: ~/.config/tmux
+    mode: 0755
+    state: directory
+
+- name: Copy tmux's configuration file
+  ansible.builtin.copy:
+    src: tmux.conf
+    dest: ~/.config/tmux/tmux.conf
+
+- name: Link tmux configuration file for legacy support
+  ansible.builtin.file:
+    src: ~/.config/tmux/tmux.conf
+    dest: ~/.tmux.conf
+    state: link
+
+- name: Download the tmux plugin manager
+  ansible.builtin.git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: ~/.config/tmux/plugins/tpm
+
+- name: Install tmux plugins
+  block:
+    - name: Running TPM's install scripts
+      ansible.builtin.shell: ~/.config/tmux/plugins/tpm/bin/install_plugins
+  rescue:
+    - name: Silence tmux errors
+      ansible.builtin.debug:
+        msg: "Manually install plugins with <prefix>+I"
+
