@@ -1,7 +1,7 @@
 -- Configure the Theme
 
 require('monokai-pro').setup({
-    transparent_background = false,
+    transparent_background = true,
     terminal_colors = false,
     filter = 'pro'
 })
