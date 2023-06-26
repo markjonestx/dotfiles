@@ -1,0 +1,11 @@
+---
+- name: Setup Desktop environment
+  hosts: all
+  vars:
+    install_software: false
+  roles:
+    - role: i3
+
+- name: Include the shell playbook
+  ansible.builtin.import_playbook: shell.yml
+

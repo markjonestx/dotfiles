@@ -1,0 +1,19 @@
+[cpu_usage]
+label=CPU
+interval=10
+min_width=CPU 100.00%
+
+[load]
+label=LOAD
+interval=10
+
+[iface]
+
+[temperature]
+label=TEMP
+interval=10
+
+[time]
+command=date '+%Y-%m-%d %H:%M:%S'
+interval=5
+

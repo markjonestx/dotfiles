@@ -1,0 +1,20 @@
+- name: Create i3 config directory
+  ansible.builtin.file:
+    path: ~/.config/i3
+    state: directory
+
+- name: Copy i3 configuration
+  ansible.builtin.copy:
+    src: i3config
+    dest: ~/.config/i3/config
+
+- name: Create i3blocks directory
+  ansible.builtin.file:
+    path: ~/.config/i3blocks
+    state: directory
+
+- name: Copy i3blocks configuration
+  ansible.builtin.copy:
+    src: i3blocks
+    dest: ~/.config/i3blocks/config
+
