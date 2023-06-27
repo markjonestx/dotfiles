@@ -13,6 +13,20 @@ then
     exec zsh -l
 fi
 
+# I use alacritty, but most systems will not recognize it
+if [[ $TERM == alacritty ]]; then
+    if ! infocmp alacritty >/dev/null 2>&1; then
+        export TERM='xterm-256color'
+    fi
+fi
+
+# Because TMUX can break things too
+if [[ $TERM == tmux-256color ]]; then
+    if ! infocmp tmux-256color >/dev/null 2>&1; then
+        export TERM='xterm-256color'
+    fi
+fi
+
 # Sudo for the systems that manage it out of tree
 if [[ ! $HOSTNAME = kube* ]]; then
     if [ -d "/apps/sudo/bin" ]; then
