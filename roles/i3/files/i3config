@@ -191,7 +191,7 @@ bar {
 exec --no-startup-id xset s on
 exec --no-startup-id xset s 600
 exec --no-startup-id picom
-exec --no-startup-id feh --bg-scale --randomize ~/Pictures/Wallpapers
+exec --no-startup-id feh --bg-fill --randomize ~/Pictures/Wallpapers
 
 exec --no-startup-id /usr/bin/mate-power-manager
 exec --no-startup-id /lib/exec/polkit-mate-authentication-agent-1
