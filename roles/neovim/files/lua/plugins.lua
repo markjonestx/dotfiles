@@ -45,8 +45,14 @@ return require('packer').startup(function(use)
     }
 
     -- NVIM Tree
-    use "nvim-tree/nvim-tree.lua" 
+    use "nvim-tree/nvim-tree.lua"
     use "nvim-tree/nvim-web-devicons"
+
+    -- Telescope
+    use {
+        'nvim-telescope/telescope.nvim', tag = '0.1.2',
+        requires = { {'nvim-lua/plenary.nvim'} }
+    }
 
 end)
 
