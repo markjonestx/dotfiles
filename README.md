@@ -16,3 +16,20 @@ SSH.
   configuration for i3, rofi, and other tools required for a full desktop
   workstation.
 
+## Software I use
+
+**On Desktops:**
+- i3
+- rofi
+- i3blocks
+
+**For the shell:**
+- zsh
+- neovim
+- treesitter-cli
+- fd-find
+- ripgrep
+- bat
+- wget
+- tmux
+
