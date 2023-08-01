@@ -22,3 +22,24 @@ vim.cmd([[
     augroup END
 ]])
 
+vim.cmd([[
+    augroup javaColorColumn
+        autocmd!
+        autocmd FileType java setlocal colorcolumn=120
+    augroup END
+]])
+
+vim.cmd([[
+    augroup xmlIndent
+        autocmd!
+        autocmd FileType xml setlocal expandtab&
+    augroup END
+]])
+
+vim.cmd([[
+    augroup javaIndent
+        autocmd!
+        autocmd FileType java setlocal expandtab&
+    augroup END
+]])
+
