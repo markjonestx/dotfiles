@@ -1,0 +1,27 @@
+# Global configuration (Path and caches)
+
+if [[ ! $HOSTNAME = kube* ]]; then
+    if [ -d "/apps/sudo/bin" ]; then
+        export PATH=/apps/sudo/bin:$PATH
+    fi
+fi
+
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH=$HOME/.local/bin:$PATH
+fi
+
+
+if [ -d "$HOME/.cargo" ]; then
+    . "$HOME/.cargo/env"
+fi
+
+if [ -d "$HOME/.local/go/bin" ]; then
+    export PATH=$HOME/.local/go/bin:$PATH
+fi
+
+# Saving my home folder from all the ZCompDumps
+if [[ ! -d "${XDG_CACHE_HOME:-$HOME/.cache}/zcompdump/" ]]; then
+    mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/zcompdump/"
+fi
+ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zcompdump/${HOSTNAME}-${ZSH_VERSION}"
+

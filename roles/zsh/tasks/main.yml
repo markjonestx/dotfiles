@@ -44,6 +44,12 @@
     dest: ~/.zshrc
     mode: 0644
 
+- name: Copy over the ZSHENV file
+  ansible.builtin.copy:
+    src: zshenv
+    dest: ~/.zshenv
+    mode: 0644
+
 - name: Copy over the configuration file over for Powerlevel10k
   ansible.builtin.copy:
     src: p10k_configuration
