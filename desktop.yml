@@ -5,6 +5,7 @@
     install_software: false
   roles:
     - role: i3
+    - role: rofi
 
 - name: Include the shell playbook
   ansible.builtin.import_playbook: shell.yml

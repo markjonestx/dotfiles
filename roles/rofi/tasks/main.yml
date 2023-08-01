@@ -1,0 +1,12 @@
+---
+- name: Create Rofi's configuration directory
+  ansible.builtin.file:
+    path: ~/.config/rofi
+    state: directory
+    mode: 0755
+
+- name: Copy the rofi config
+  ansible.builtin.copy:
+    src: rofi/
+    dest: ~/.config/rofi
+
