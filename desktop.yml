@@ -6,6 +6,7 @@
   roles:
     - role: i3
     - role: rofi
+    - role: wezterm
 
 - name: Include the shell playbook
   ansible.builtin.import_playbook: shell.yml

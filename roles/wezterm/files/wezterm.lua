@@ -1,0 +1,22 @@
+local wezterm = require 'wezterm'
+
+local config = {
+    window_background_opacity = 0.86,
+--    color_scheme = 'Tokyo Night',
+    color_scheme = 'Catppuccin Mocha',
+
+    hide_tab_bar_if_only_one_tab = true,
+    tab_bar_at_bottom = false,
+    use_fancy_tab_bar = false,
+}
+
+config.window_frame = {
+    font = wezterm.font { family = 'ComicCodeLigatures Nerd Font', },
+}
+
+config.colors = {
+    background= 'black',
+}
+
+return config
+

@@ -1,0 +1,5 @@
+---
+- name: Copy Wez's configuration file
+  ansible.builtin.copy:
+    src: wezterm.lua
+    dest: ~/.wezterm.lua
