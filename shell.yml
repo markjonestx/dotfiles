@@ -12,6 +12,4 @@
     - role: neovim
     - role: tmux
     - role: bat
-
-
-
+    - role: git
