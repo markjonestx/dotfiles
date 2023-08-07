@@ -8,9 +8,10 @@
     - role: zsh
     - role: bash
       when: '"bash" in ansible_user_shell'
-  
+
     - role: neovim
     - role: tmux
+    - role: bat
 
 
 

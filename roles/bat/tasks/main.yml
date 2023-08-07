@@ -1,0 +1,17 @@
+---
+- name: Create the directory where bat's config lives
+  ansible.builtin.file:
+    dest: ~/.config/bat
+    state: directory
+    mode: 0755
+
+- name: Install Catppuccin Themes
+  ansible.builtin.git:
+    repo: https://github.com/catppuccin/bat.git
+    dest: ~/.config/bat/themes
+
+- name: Copy over the bat config
+  ansible.builtin.copy:
+    src: config
+    dest: ~/.config/bat/config
+    mode: 0644
