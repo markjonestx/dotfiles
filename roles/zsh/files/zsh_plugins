@@ -1,0 +1,7 @@
+# Cool fish-like stuff
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-autosuggestions kind:defer
+zsh-users/zsh-history-substring-search
+
+# The powerful shell for powerful users
+romkatv/powerlevel10k

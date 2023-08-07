@@ -1,56 +1,47 @@
 # The login nodes use their own special prompt
-if [[ $HOSTNAME == sci* ]]; then
-    setopt PROMPT_SUBST
-    PROMPT='%F{green}%*%f %F{magenta}${(%):-%m}%f %F{blue}%~%f $ '
-else
-    ##
-    # Prompts for normal systems
-    ##
-   
-    # OhMyZSH stuffs
-    export ZSH="$HOME/.local/share/shell/ohmyzsh"
-    export ZSH_CUSTOM="$HOME/.local/share/shell/zsh_custom"
+setopt PROMPT_SUBST
+setopt appendhistory
 
-    # I use alacritty, but most systems will not recognize it
-    if [[ $TERM == alacritty ]]; then
-        if ! infocmp alacritty >/dev/null 2>&1; then
-            export TERM='xterm-256color'
-        fi
+HISTFILE=~/.zsh_history
+HISTSIZE=25000
+SAVEHIST=2500
+PROMPT='%F{green}%*%f %F{magenta}${(%):-%m}%f %F{blue}%~%f $ '
+
+##
+# Prompts for normal systems
+##
+
+zsh_plugins=$HOME/.local/share/shell/zsh_plugins
+source $HOME/.local/share/shell/antidote/antidote.zsh
+antidote load $zsh_plugins
+
+# Configure history search
+HISTORY_SUBSTRING_SEARCH_PREFIXED=true
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
+
+# Because TMUX can break things
+if [[ $TERM == tmux-256color ]]; then
+    if ! infocmp tmux-256color >/dev/null 2>&1; then
+        export TERM='xterm-256color'
+    fi
+fi
+
+# Powerlevel10k requires a ZSH >= 5.01
+if [[ "$(echo $ZSH_VERSION | awk -F. '{ printf("%d%03d", $1,$2)}')" -ge 5001 ]]; then
+
+    # Required for instantaneous prompt
+    if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+        source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
     fi
 
-    # Because TMUX can break things too
-    if [[ $TERM == tmux-256color ]]; then
-        if ! infocmp tmux-256color >/dev/null 2>&1; then
-            export TERM='xterm-256color'
-        fi
+    # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+    ZSH_THEME="powerlevel10k/powerlevel10k"
+    if [[ -f ~/.local/share/shell/p10k_configuration ]]; then
+        source ~/.local/share/shell/p10k_configuration
     fi
-    
-    # Powerlevel10k requires a ZSH >= 5.01
-    if [[ "$(echo $ZSH_VERSION | awk -F. '{ printf("%d%03d", $1,$2)}')" -ge 5001 ]]; then
-    
-        # Required for instantaneous prompt
-        if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-            source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-        fi
-        
-        # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-        ZSH_THEME="powerlevel10k/powerlevel10k"
-        if [[ -f ~/.local/share/shell/p10k_configuration ]]; then
-            source ~/.local/share/shell/p10k_configuration
-        fi
-    else
-        # A simple fallback for when Powerlevel10k can't work
-        ZSH_THEME="alanpeabody"
-    fi
-
-     # update automatically without asking
-     zstyle ':omz:update' mode auto 
-    
-    plugins=(zsh-syntax-highlighting)
-    
-    source $ZSH/oh-my-zsh.sh
-    setopt no_share_history
-    unsetopt share_history
 fi
 
 # Set Editor based on what's available
@@ -90,7 +81,7 @@ fcd() {
     else
         echo "Directory not found!"
     fi
-} 
+}
 
 fcdp() {
     fcd ~/Desktop

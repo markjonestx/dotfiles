@@ -1,0 +1,6 @@
+source ~/.zshenv
+
+if [[ -d "$HOME/.local/share/Jetbrains/Toolbox/scripts" ]]; then
+    export PATH="$PATH:$HOME/.local/share/Jetbrains/Toolbox/scripts"
+fi
+

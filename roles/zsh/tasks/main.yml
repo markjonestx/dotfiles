@@ -5,38 +5,10 @@
     state: directory
     mode: 0755
 
-- name: Create the custom ZSH folder
-  ansible.builtin.file:
-    dest: ~/.local/share/shell/zsh_custom
-    state: directory
-    mode: 0755
-
-- name: Create the custom ZSH plugin folder
-  ansible.builtin.file:
-    dest: ~/.local/share/shell/zsh_custom/plugins
-    state: directory
-    mode: 0755
-
-- name: Create the custom ZSH themes folder
-  ansible.builtin.file:
-    dest: ~/.local/share/shell/zsh_custom/themes
-    state: directory
-    mode: 0755
-
-- name: Install OhMyZSH!
+- name: Install Antidote
   ansible.builtin.git:
-    repo: https://github.com/ohmyzsh/ohmyzsh.git
-    dest: ~/.local/share/shell/ohmyzsh
-
-- name: Install ZSH Syntax Highlighting
-  ansible.builtin.git:
-    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git 
-    dest: ~/.local/share/shell/zsh_custom/plugins/zsh-syntax-highlighting
-
-- name: Install Powerlevel10K
-  ansible.builtin.git:
-    repo: https://github.com/romkatv/powerlevel10k.git 
-    dest: ~/.local/share/shell/zsh_custom/themes/powerlevel10k
+    repo: git@github.com:mattmc3/antidote.git
+    dest: ~/.local/share/shell/antidote
 
 - name: Copy over the ZSHRC file
   ansible.builtin.copy:
@@ -48,6 +20,18 @@
   ansible.builtin.copy:
     src: zshenv
     dest: ~/.zshenv
+    mode: 0644
+
+- name: Copy over the ZPROFILE file
+  ansible.builtin.copy:
+    src: zprofile
+    dest: ~/.zprofile
+    mode: 0644
+
+- name: Copy the plugins file
+  ansible.builtin.copy:
+    src: zsh_plugins
+    dest: ~/.local/share/shell/zsh_plugins
     mode: 0644
 
 - name: Copy over the configuration file over for Powerlevel10k
