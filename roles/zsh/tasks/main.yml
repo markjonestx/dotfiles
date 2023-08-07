@@ -16,12 +16,6 @@
     dest: ~/.zshrc
     mode: 0644
 
-- name: Copy over the ZSHENV file
-  ansible.builtin.copy:
-    src: zshenv
-    dest: ~/.zshenv
-    mode: 0644
-
 - name: Copy over the ZPROFILE file
   ansible.builtin.copy:
     src: zprofile
