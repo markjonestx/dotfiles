@@ -26,14 +26,6 @@ return require('packer').startup(function(use)
         },
     }
 
-    -- Theme
-    use {
-        'loctvl842/monokai-pro.nvim',
-        config = function()
-            require('monokai-pro').setup()
-        end
-    }
-
     -- Autosave
     use {
         "Pocco81/auto-save.nvim",
@@ -44,9 +36,13 @@ return require('packer').startup(function(use)
         end
     }
 
-    -- NVIM Tree
-    use "nvim-tree/nvim-tree.lua"
-    use "nvim-tree/nvim-web-devicons"
+    -- Autotrim whitespaces and excess newlines
+    use {
+        'cappyzawa/trim.nvim',
+        config = function() require('trim').setup({
+            trim_last_line = false,
+        }) end,
+    }
 
     -- Telescope
     use {
@@ -57,6 +53,44 @@ return require('packer').startup(function(use)
     -- Dadbod (Databases, cause I'm crazy
     use 'tpope/vim-dadbod'
     use 'kristijanhusak/vim-dadbod-ui'
+
+    -- Github Copilot, for intelligent autofill- where it makes sense
+    use 'github/copilot.vim'
+
+    -- Gitsigns for git integration
+    use {
+        'lewis6991/gitsigns.nvim',
+        config = function()
+            require('gitsigns').setup()
+        end
+    }
+
+    -- Automatic Indentation
+    use {
+        'nmac427/guess-indent.nvim',
+        config = function() require('guess-indent').setup() end,
+    }
+
+    -- Theme
+    use { "catppuccin/nvim", as = "catppuccin" }
+
+    -- NVIM Tree
+    use "nvim-tree/nvim-tree.lua"
+    use "nvim-tree/nvim-web-devicons"
+
+    -- Lualine for statusline
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+    }
+
+    -- Notify for notifications
+    use {
+        'rcarriga/nvim-notify',
+        config = function()
+            vim.notify = require('notify')
+        end
+    }
 
 end)
 
