@@ -7,7 +7,7 @@
 
 - name: Install Antidote
   ansible.builtin.git:
-    repo: git@github.com:mattmc3/antidote.git
+    repo: https://github.com/mattmc3/antidote.git
     dest: ~/.local/share/shell/antidote
 
 - name: Copy over the ZSHRC file
