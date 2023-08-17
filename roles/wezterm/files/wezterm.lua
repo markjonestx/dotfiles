@@ -9,6 +9,7 @@ local config = {
     use_fancy_tab_bar = false,
 
     pane_focus_follows_mouse = true,
+    audible_bell = "Disabled",
 
     font = wezterm.font('ComicCodeLigatures Nerd Font'),
     font_size = 11
