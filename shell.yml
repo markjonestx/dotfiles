@@ -5,10 +5,7 @@
     install_software: false
 
   roles:
-    - role: zsh
-    - role: bash
-      when: '"bash" in ansible_user_shell'
-
+    - role: shell
     - role: neovim
     - role: tmux
     - role: bat

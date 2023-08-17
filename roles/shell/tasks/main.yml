@@ -1,0 +1,36 @@
+---
+- name: Copy the configuration directory
+  ansible.builtin.copy:
+    src: configs
+    dest: ~/.shell.d
+
+- name: Install Antidote
+  ansible.builtin.git:
+    repo: https://github.com/mattmc3/antidote.git
+    dest: ~/.shell.d/antidote
+
+- name: Copy over the ZSHRC file
+  ansible.builtin.copy:
+    src: zshrc
+    dest: ~/.zshrc
+    mode: 0644
+
+- name: Copy over the ZPROFILE file
+  ansible.builtin.copy:
+    src: zprofile
+    dest: ~/.zprofile
+    mode: 0644
+
+- name: Copy over the BASHRC file
+  when: '"bash" in ansible_user_shell'
+  ansible.builtin.copy:
+    src: bashrc
+    dest: ~/.bashrc
+    mode: 0644
+
+- name: Copy over the BASH Profile file
+  when: '"bash" in ansible_user_shell'
+  ansible.builtin.copy:
+    src: bash_profile
+    dest: ~/.bash_profile
+    mode: 0644

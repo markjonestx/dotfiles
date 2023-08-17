@@ -1,0 +1,68 @@
+# Because TMUX can break things
+if [[ $TERM == tmux-256color ]]; then
+    if ! infocmp tmux-256color >/dev/null 2>&1; then
+        export TERM='xterm-256color'
+    fi
+fi
+
+# Fixing up the PATH
+if [[ ! $HOSTNAME = kube* ]]; then
+    if [ -d "/apps/sudo/bin" ]; then
+        export PATH=/apps/sudo/bin:$PATH
+    fi
+fi
+
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH=$HOME/.local/bin:$PATH
+fi
+
+if [ -d "$HOME/.local/go/bin" ]; then
+    export PATH=$HOME/.local/go/bin:$PATH
+fi
+
+if [ -d "$HOME/.cargo" ]; then
+    . "$HOME/.cargo/env"
+fi
+
+if [ -d "$HOME/.fzf" ]; then
+    export PATH="$PATH:$HOME/.fzf/bin"
+fi
+
+if [ -d "/opt/homebrew/bin" ]; then
+    export PATH="$PATH:/opt/homebrew/bin"
+fi
+
+if [[ -d "$HOME/.local/share/Jetbrains/Toolbox/scripts" ]]; then
+    export PATH="$PATH:$HOME/.local/share/Jetbrains/Toolbox/scripts"
+fi
+
+# Setup Editor
+if command -v nvim &> /dev/null; then
+    export EDITOR=$(which nvim)
+    export MANPAGER="${EDITOR} +Man!"
+    alias vim=nvim
+else
+    echo "Warning- VIM"
+    export EDITOR=$(which vim)
+    if command -v bat &> /dev/null; then
+        export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    fi
+fi
+
+# FZF setup
+if [[ -n $TMUX ]]; then
+    export PFZF=$(which fzf-tmux)
+else
+    export PFZF=$(which fzf)
+fi
+
+export FZF_DEFAULT_OPTS=" \
+--color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
+--color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
+
+# LS setup
+if command -v lsd &> /dev/null; then
+    export LSCMD=lsd
+else
+    export LSCMD=ls
+fi

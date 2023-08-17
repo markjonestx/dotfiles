@@ -1,0 +1,5 @@
+source $HOME/.shell.d/env
+source $HOME/.shell.d/base.zsh
+source $HOME/.shell.d/aliases.zsh
+source $HOME/.shell.d/functions.zsh
+source $HOME/.shell.d/keybindings.zsh
