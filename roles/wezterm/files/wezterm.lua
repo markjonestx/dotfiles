@@ -8,6 +8,8 @@ local config = {
     tab_bar_at_bottom = false,
     use_fancy_tab_bar = false,
 
+    pane_focus_follows_mouse = true,
+
     font = wezterm.font('ComicCodeLigatures Nerd Font'),
     font_size = 11
 }
