@@ -1,6 +1,10 @@
 [user]
 	name = Mark Jones
+{% if ansible_facts['fqdn'].endswith('jlab.org') %}
 	email = maj@jlab.org
+{% else %}
+	email = markjonestx@live.com
+{% endif %}
 [core]
 	editor = vim
 [color]
@@ -17,10 +21,12 @@
 	amend = commit --amend --reset-author
 	ss = status -s
 	aa = add -A
-	co = commit
-	pr = pull --rebase
-	mr = merge --no-ff
-	chb = checkout -b
+	c = commit
+	co = checkout
+	cob = checkout -b
+	pl = pull --rebase
+	ps = push
+	m = merge --no-ff
 	wkls = worktree list
 	wkadd = worktree add
 	wkrm = worktree remove

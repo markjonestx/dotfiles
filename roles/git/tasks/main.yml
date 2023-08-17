@@ -1,6 +1,5 @@
 ---
 - name: Copy over the git config
-  ansible.builtin.copy:
-    src: config
+  ansible.builtin.template:
+    src: config.j2
     dest: ~/.gitconfig
-    mode: 0644
