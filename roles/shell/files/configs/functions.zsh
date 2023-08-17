@@ -45,7 +45,12 @@ edit() {
     if [[ -f $1 ]]; then
         $EDITOR $1
     else
-        dir=$(fd -t f $1 | $PFZF --prompt "Select file: " --preview "bat --color=always --style=numbers --line-range :500 {}")
+        if [[ -n $2 ]]; then
+            dir=$(fd -t f $1 | $PFZF -q $2 --prompt "Select file: " --preview "bat --color=always --style=numbers --line-range :500 {}")
+        else
+            dir=$(fd -t f $1 | $PFZF --prompt "Select file: " --preview "bat --color=always --style=numbers --line-range :500 {}")
+        fi
+
         if [[ -n $dir ]]; then
             $EDITOR $dir
         else
