@@ -1,8 +1,8 @@
 ---
 - name: Copy the configuration directory
   ansible.builtin.copy:
-    src: configs
-    dest: ~/.shell.d
+    src: configs/
+    dest: ~/.shell.d/
 
 - name: Install Antidote
   ansible.builtin.git:
