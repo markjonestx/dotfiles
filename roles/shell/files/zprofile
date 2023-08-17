@@ -1,1 +1,1 @@
-$HOME/.shell.d/env
+source $HOME/.shell.d/env
