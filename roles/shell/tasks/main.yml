@@ -34,3 +34,9 @@
     src: bash_profile
     dest: ~/.bash_profile
     mode: 0644
+
+- name: Copy dircolors
+  ansible.builtin.copy:
+    src: dircolors
+    dest: ~/.dircolors
+    mode: 0644
