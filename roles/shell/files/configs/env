@@ -5,6 +5,12 @@ if [[ $TERM == tmux-256color ]]; then
     fi
 fi
 
+# Fix some settings on OpenBSD
+if [ "$(uname -s)" = "OpenBSD" ]; then
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
+fi
+
 # Fixing up the PATH
 if [[ ! $HOSTNAME = kube* ]]; then
     if [ -d "/apps/sudo/bin" ]; then
@@ -63,6 +69,8 @@ export FZF_DEFAULT_OPTS=" \
 # LS setup
 if command -v lsd &> /dev/null; then
     export LSCMD=lsd
+elif command -v gls &> /dev/null; then
+    export LSCMD=gls
 else
     export LSCMD=ls
 fi

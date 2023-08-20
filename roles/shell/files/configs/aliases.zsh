@@ -10,6 +10,10 @@ alias p=popd
 alias gt=git
 alias grep="grep --color"
 
+if [ "$(uname -s)" = "OpenBSD" ]; then
+    alias bat='bat --no-pager --plain'
+fi
+
 if command -v batcat &> /dev/null; then
     alias bat=batcat
 fi
