@@ -10,6 +10,9 @@ SAVEHIST=2500
 
 PROMPT='%F{green}%*%f %F{magenta}${(%):-%m}%f %F{blue}%~%f $ '
 
+# Force emcas (default) over vim
+bindkey -e
+
 # Powerlevel10k and Antidote requires a ZSH >= 5.01
 if [[ "$(echo $ZSH_VERSION | awk -F. '{ printf("%d%03d", $1,$2)}')" -ge 5001 ]]; then
 
