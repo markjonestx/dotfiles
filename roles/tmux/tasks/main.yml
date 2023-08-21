@@ -25,6 +25,8 @@
   block:
     - name: Running TPM's install scripts
       ansible.builtin.shell: ~/.config/tmux/plugins/tpm/bin/install_plugins
+    - name: Running TPM's update scripts
+      ansible.builtin.shell: ~/.config/tmux/plugins/tpm/bin/update_plugins all
   rescue:
     - name: Silence tmux errors
       ansible.builtin.debug:

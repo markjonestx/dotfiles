@@ -24,7 +24,7 @@
   block:
     - name: Install and Update Packer plugins
       ansible.builtin.shell: |
-        ~/.local/bin/nvim --headless \
+        nvim --headless \
           -c 'autocmd User PackerComplete quitall' \
           -c 'PackerSync'
   rescue:
