@@ -27,7 +27,6 @@ require("nvim-tree").setup({
 --
 -- Configure the Color Theme
 --
-
 require('catppuccin').setup({
     flavour = "mocha",
     transparent_background = true,
@@ -47,10 +46,15 @@ vim.cmd(':colorscheme catppuccin')
 --
 -- Configure the Status Line
 --
-
 require('lualine').setup({
     options = {
         theme = 'catppuccin',
     }
 })
 
+--
+-- Configure the notification background
+--
+require("notify").setup({
+  background_colour = "#000000",
+})
