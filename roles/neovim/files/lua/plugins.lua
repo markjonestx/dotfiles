@@ -57,6 +57,26 @@ return require('packer').startup(function(use)
     -- Github Copilot, for intelligent autofill- where it makes sense
     use 'github/copilot.vim'
 
+    -- Obsidian Integration
+    use {
+        "epwalsh/obsidian.nvim",
+        requires = {
+            "nvim-lua/plenary.nvim"
+        },
+        config = function()
+            require("obsidian").setup({
+                dir = "~/Documents/Notes/",
+                daily_notes = {
+                    folder = "0. Daily Notes",
+                    date_format = "%Y-%m-%d"
+                },
+                completion = {
+                    nvim_cmp = true,
+                }
+            })
+        end,
+    }
+
     -- Gitsigns for git integration
     use {
         'lewis6991/gitsigns.nvim',
