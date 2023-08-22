@@ -15,3 +15,7 @@
     src: config
     dest: ~/.config/bat/config
     mode: 0644
+
+- name: Initialize bat's cache
+  ansible.builtin.shell:
+    cmd: bat cache --build
