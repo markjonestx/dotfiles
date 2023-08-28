@@ -47,7 +47,21 @@ return require('packer').startup(function(use)
     -- Telescope
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.2',
-        requires = { {'nvim-lua/plenary.nvim'} }
+        requires = { {'nvim-lua/plenary.nvim'} },
+    }
+
+    -- Nvim Code Actions Menu
+    use {
+        'weilbith/nvim-code-action-menu',
+        cmd = 'CodeActionMenu',
+    }
+
+    -- Code Action Identifier
+    use {
+        'kosayoda/nvim-lightbulb',
+        config = function() require('nvim-lightbulb').setup({
+            autocmd = { enabled = true },
+        }) end,
     }
 
     -- Dadbod (Databases, cause I'm crazy
@@ -56,6 +70,9 @@ return require('packer').startup(function(use)
 
     -- Github Copilot, for intelligent autofill- where it makes sense
     use 'github/copilot.vim'
+
+    -- R integration
+    use 'jalvesaq/Nvim-R'
 
     -- Obsidian Integration
     use {
