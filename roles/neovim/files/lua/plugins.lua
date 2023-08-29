@@ -94,6 +94,9 @@ return require('packer').startup(function(use)
         end,
     }
 
+    -- Fugitive for git integration
+    use 'tpope/vim-fugitive'
+
     -- Gitsigns for git integration
     use {
         'lewis6991/gitsigns.nvim',
