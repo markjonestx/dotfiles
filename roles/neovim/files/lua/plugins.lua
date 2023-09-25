@@ -74,26 +74,6 @@ return require('packer').startup(function(use)
     -- R integration
     use 'jalvesaq/Nvim-R'
 
-    -- Obsidian Integration
-    use {
-        "epwalsh/obsidian.nvim",
-        requires = {
-            "nvim-lua/plenary.nvim"
-        },
-        config = function()
-            require("obsidian").setup({
-                dir = "~/Documents/Notes/",
-                daily_notes = {
-                    folder = "0. Daily Notes",
-                    date_format = "%Y-%m-%d"
-                },
-                completion = {
-                    nvim_cmp = true,
-                }
-            })
-        end,
-    }
-
     -- Fugitive for git integration
     use 'tpope/vim-fugitive'
 
@@ -132,6 +112,16 @@ return require('packer').startup(function(use)
             vim.notify.setup({
                 background_colour = '#00',
             })
+        end
+    }
+
+    -- Shows keybindings
+    use {
+        'folke/which-key.nvim',
+        config = function()
+            vim.o.timeoutlen = true
+            vim.o.timeoutlen = 500
+            require('which-key').setup()
         end
     }
 

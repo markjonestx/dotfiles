@@ -7,6 +7,18 @@ set.expandtab = true
 set.number = true
 set.relativenumber = true
 set.colorcolumn = "79"
+set.hlsearch = false
+set.ignorecase = true
+set.smartcase = true
+set.mouse = "a"
+set.clipboard = "unnamedplus"
+set.breakindent = true
+set.undofile = true
+set.signcolumn = "yes"
+vim.updatetime = 250
+set.timeoutlen = 300
+set.termguicolors = true
+
 
 vim.cmd([[
     augroup rustColorColumn
