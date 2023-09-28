@@ -1,8 +1,16 @@
 # The login nodes use their own special prompt
 setopt prompt_subst
-setopt appendhistory
 setopt auto_pushd
+setopt multios
+setopt long_list_jobs
+setopt interactive_comments
 
+setopt appendhistory
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt hist_verify
 HISTORY_SUBSTRING_SEARCH_PREFIXED=true
 HISTFILE=~/.zsh_history
 HISTSIZE=25000

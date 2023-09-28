@@ -3,3 +3,6 @@ source $HOME/.shell.d/base.zsh
 source $HOME/.shell.d/aliases.zsh
 source $HOME/.shell.d/functions.zsh
 source $HOME/.shell.d/keybindings.zsh
+source $HOME/.shell.d/thefuck.zsh
+source $HOME/.shell.d/clipboard.zsh
+source $HOME/.shell.d/completion.zsh
