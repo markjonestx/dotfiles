@@ -10,15 +10,10 @@ return require('packer').startup(function(use)
     -- LSP Configuration
     use {
         'VonHeikemen/lsp-zero.nvim',
-        branch = 'v2.x',
+        branch = 'v3.x',
         requires = {
             { 'neovim/nvim-lspconfig' },
-            {
-                'williamboman/mason.nvim',
-                run = function()
-                    pcall(vim.cmd, 'MasonUpdate')
-                end,
-            },
+            { 'williamboman/mason.nvim' },
             { 'williamboman/mason-lspconfig.nvim' },
             { 'hrsh7th/nvim-cmp' },
             { 'hrsh7th/cmp-nvim-lsp' },
@@ -27,26 +22,14 @@ return require('packer').startup(function(use)
     }
 
     -- Autosave
-    use {
-        "Pocco81/auto-save.nvim",
-        config = function()
-            require("auto-save").setup {
-
-            }
-        end
-    }
+    use "Pocco81/auto-save.nvim"
 
     -- Autotrim whitespaces and excess newlines
-    use {
-        'cappyzawa/trim.nvim',
-        config = function() require('trim').setup({
-            trim_last_line = false,
-        }) end,
-    }
+    use 'cappyzawa/trim.nvim'
 
     -- Telescope
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.2',
+        'nvim-telescope/telescope.nvim', tag = '0.1.3',
         requires = { {'nvim-lua/plenary.nvim'} },
     }
 
@@ -57,12 +40,10 @@ return require('packer').startup(function(use)
     }
 
     -- Code Action Identifier
-    use {
-        'kosayoda/nvim-lightbulb',
-        config = function() require('nvim-lightbulb').setup({
-            autocmd = { enabled = true },
-        }) end,
-    }
+    use 'kosayoda/nvim-lightbulb'
+
+    -- LSP Kind, better Auto completion icons
+    use 'onsails/lspkind.nvim'
 
     -- Dadbod (Databases, cause I'm crazy
     use 'tpope/vim-dadbod'
@@ -78,18 +59,10 @@ return require('packer').startup(function(use)
     use 'tpope/vim-fugitive'
 
     -- Gitsigns for git integration
-    use {
-        'lewis6991/gitsigns.nvim',
-        config = function()
-            require('gitsigns').setup()
-        end
-    }
+    use 'lewis6991/gitsigns.nvim'
 
     -- Automatic Indentation
-    use {
-        'nmac427/guess-indent.nvim',
-        config = function() require('guess-indent').setup() end,
-    }
+    use 'nmac427/guess-indent.nvim'
 
     -- Theme
     use { "catppuccin/nvim", as = "catppuccin" }
@@ -105,25 +78,9 @@ return require('packer').startup(function(use)
     }
 
     -- Notify for notifications
-    use {
-        'rcarriga/nvim-notify',
-        config = function()
-            vim.notify = require('notify')
-            vim.notify.setup({
-                background_colour = '#00',
-            })
-        end
-    }
+    use  'rcarriga/nvim-notify'
 
     -- Shows keybindings
-    use {
-        'folke/which-key.nvim',
-        config = function()
-            vim.o.timeoutlen = true
-            vim.o.timeoutlen = 500
-            require('which-key').setup()
-        end
-    }
+    use 'folke/which-key.nvim'
 
 end)
-

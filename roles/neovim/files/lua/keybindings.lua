@@ -1,8 +1,14 @@
 local keymap = vim.keymap
 
 -- General
-keymap.set('n', '<leader>b', '<cmd>bprevious<CR>')
 keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+keymap.set({ 'n', 'v' }, '{', '{zz')
+keymap.set({ 'n', 'v' }, '}', '}zz')
+keymap.set({ 'n', 'v' }, '<C-u>', '<C-u>zz')
+keymap.set({ 'n', 'v' }, '<C-d>', '<C-d>zz')
+keymap.set({ 'n', 'v' }, 'p', 'P')
+keymap.set({ 'n', 'v' }, '<leader>x', '"_x')
+keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
 
 -- Improved wordwrap
 keymap.set('n', 'k', 'v:count == 0 ? "gk" : "k"', { expr = true, silent = true })

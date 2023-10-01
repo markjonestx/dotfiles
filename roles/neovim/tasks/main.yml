@@ -32,3 +32,12 @@
       ansible.builtin.debug:
         msg: "Packer will have to be synced/updated manually. ':PackerSync' ':PackerUpdate'"
 
+- name: Copy the default vim configuration
+  ansible.builtin.copy:
+    src: default.vim
+    dest: ~/.vimrc
+
+- name: Copy the default Intellij vim configuration
+  ansible.builtin.copy:
+    src: default.vim
+    dest: ~/.ideavimrc
