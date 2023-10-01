@@ -1,5 +1,6 @@
+# vim: syntax=bash
 # Because TMUX can break things
-if [[ $TERM == tmux-256color ]]; then
+if [ $TERM = tmux-256color ]; then
     if ! infocmp tmux-256color >/dev/null 2>&1; then
         export TERM='xterm-256color'
     fi
@@ -68,9 +69,13 @@ export FZF_DEFAULT_OPTS=" \
 
 # LS setup
 if command -v lsd &> /dev/null; then
-    export LSCMD=lsd
+    if [ "$TERM" = "linux" ] || [ "$TERM" = "tmux" ]; then
+        export LSCMD='lsd --icon=never'
+    else
+        export LSCMD='lsd'
+    fi
 elif command -v gls &> /dev/null; then
-    export LSCMD=gls
+    export LSCMD='gls'
 else
-    export LSCMD=ls
+    export LSCMD='ls'
 fi

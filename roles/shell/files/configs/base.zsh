@@ -36,8 +36,10 @@ if [[ "$(echo $ZSH_VERSION | awk -F. '{ printf("%d%03d", $1,$2)}')" -ge 5001 ]];
     fi
 
     # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-    if [[ -f ~/.shell.d/p10k_configuration ]]; then
-        source ~/.shell.d/p10k_configuration
+    if [[ "$TERM" = "linux" ]]; then
+        source "$HOME/.shell.d/p10k_fb_configuration"
+    else
+        source "$HOME/.shell.d/p10k_xterm_configuration"
     fi
 fi
 
