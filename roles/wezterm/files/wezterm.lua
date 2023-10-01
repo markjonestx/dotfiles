@@ -1,7 +1,7 @@
 local wezterm = require 'wezterm'
 
 local config = {
-    window_background_opacity = 0.82,
+    window_background_opacity = 0.9,
     color_scheme = 'Catppuccin Mocha',
 
     hide_tab_bar_if_only_one_tab = true,
