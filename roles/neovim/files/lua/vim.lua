@@ -21,6 +21,17 @@ set.termguicolors = true
 
 
 vim.cmd([[
+    augroup returnCursor
+        autocmd!
+        autocmd BufReadPost *
+            \ if &filetype !~# '^\(commit\|git\|fugitive\|gitcommit\|gitrebase\|svn\|hg\|diff\)$'
+            \ && line("'\"") > 0 && line("'\"") <= line("$")
+            \ | exe "normal! g`\""
+            \ | endif
+    augroup END
+]])
+
+vim.cmd([[
     augroup rustColorColumn
         autocmd!
         autocmd FileType rust setlocal colorcolumn=99

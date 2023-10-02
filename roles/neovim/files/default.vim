@@ -32,6 +32,15 @@ vnoremap <C-u> <C-u>zz
 vnoremap <C-d> <C-d>zz
 vnoremap p "_dp
 
+augroup returnCursor
+    autocmd!
+    autocmd BufReadPost *
+        \ if &filetype !~# '^\(commit\|git\|fugitive\|gitcommit\|gitrebase\|svn\|hg\|diff\)$'
+        \ && line("'\"") > 0 && line("'\"") <= line("$")
+        \ | exe "normal! g`\""
+        \ | endif
+augroup END
+
 augroup rustColorColumn
     autocmd!
     autocmd FileType rust setlocal colorcolumn=99
