@@ -6,7 +6,7 @@ keymap.set({ 'n', 'v' }, '{', '{zz')
 keymap.set({ 'n', 'v' }, '}', '}zz')
 keymap.set({ 'n', 'v' }, '<C-u>', '<C-u>zz')
 keymap.set({ 'n', 'v' }, '<C-d>', '<C-d>zz')
-keymap.set({ 'n', 'v' }, 'p', 'P')
+keymap.set('v', 'p', '"_dp')
 keymap.set({ 'n', 'v' }, '<leader>x', '"_x')
 keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
 

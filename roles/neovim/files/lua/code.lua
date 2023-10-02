@@ -72,11 +72,12 @@ cmp.setup({
     },
 
     sources = {
+        {name = 'git'},
         {name = 'path'},
         {name = 'nvim_lsp'},
-        {name = 'buffer', keyword_length = 3},
+        {name = 'nvim_lua'},
         {name = 'luasnip', keyword_length = 2},
-        {name = 'git'},
+        {name = 'buffer', keyword_length = 3},
     },
 
     mapping = cmp.mapping.preset.insert({

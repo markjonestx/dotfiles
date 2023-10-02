@@ -25,13 +25,12 @@ nnoremap { {zz
 nnoremap } }zz
 nnoremap <C-u> <C-u>zz
 nnoremap <C-d> <C-d>zz
-nnoremap p P
 
 vnoremap { {zz
 vnoremap } }zz
 vnoremap <C-u> <C-u>zz
 vnoremap <C-d> <C-d>zz
-vnoremap p P
+vnoremap p "_dp
 
 augroup rustColorColumn
     autocmd!
