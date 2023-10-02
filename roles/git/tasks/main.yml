@@ -1,3 +1,4 @@
+# vim: ft=yaml.ansible
 ---
 - name: Copy over the git config
   ansible.builtin.template:

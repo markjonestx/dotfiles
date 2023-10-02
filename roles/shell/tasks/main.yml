@@ -1,3 +1,4 @@
+# vim: ft=yaml.ansible
 ---
 - name: Copy the configuration directory
   ansible.builtin.copy:

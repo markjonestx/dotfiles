@@ -1,3 +1,4 @@
+# vim: ft=yaml.ansible
 ---
 - name: Copy Wez's configuration file
   ansible.builtin.copy:

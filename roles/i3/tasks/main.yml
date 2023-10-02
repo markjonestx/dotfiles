@@ -1,3 +1,5 @@
+# vim: ft=yaml.ansible
+---
 - name: Create i3 config directory
   ansible.builtin.file:
     path: ~/.config/i3

@@ -1,3 +1,4 @@
+# vim: ft=yaml.ansible
 ---
 - name: Setup CLI environment and associated tools
   hosts: all

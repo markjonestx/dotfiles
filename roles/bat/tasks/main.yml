@@ -1,3 +1,4 @@
+# vim: ft=yaml.ansible
 ---
 - name: Create the directory where bat's config lives
   ansible.builtin.file:

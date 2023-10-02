@@ -1,3 +1,4 @@
+# vim: ft=yaml.ansible
 ---
 - name: Setup Desktop environment
   hosts: all
