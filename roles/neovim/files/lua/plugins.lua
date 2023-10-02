@@ -21,6 +21,9 @@ return require('packer').startup(function(use)
         },
     }
 
+    -- Git Completions
+    use { "petertriho/cmp-git", requires  = "nvim-lua/plenary.nvim" }
+
     -- Autosave
     use "Pocco81/auto-save.nvim"
 

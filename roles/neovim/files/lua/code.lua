@@ -1,5 +1,6 @@
 local autosave = require('auto-save')
 local cmp = require('cmp')
+local cmpgit = require('cmp_git')
 local gitsigns = require('gitsigns')
 local indent = require('guess-indent')
 local lightbulb = require('nvim-lightbulb')
@@ -75,6 +76,7 @@ cmp.setup({
         {name = 'nvim_lsp'},
         {name = 'buffer', keyword_length = 3},
         {name = 'luasnip', keyword_length = 2},
+        {name = 'git'},
     },
 
     mapping = cmp.mapping.preset.insert({
@@ -96,6 +98,14 @@ cmp.setup({
 
 -- Git stuffs
 gitsigns.setup()
+cmpgit.setup({
+    gitlab = {
+        hosts = {
+            'https://git.araska.sh',
+            'https://gitlab.jlab.org'
+        }
+    }
+})
 
 -- Extras
 autosave.setup()
