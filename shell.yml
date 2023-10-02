@@ -7,6 +7,7 @@
 
   roles:
     - role: bat
+    - role: btop
     - role: git
     - role: neovim
     - role: shell

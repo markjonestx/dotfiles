@@ -1,0 +1,12 @@
+# vim: ft=yaml.ansible
+---
+- name: Install the Catppuccin theme
+  ansible.builtin.git:
+    repo: https://github.com/catppuccin/btop.git
+    dest: ~/.config/btop
+
+- name: Copy over the btop configuration file
+  ansible.builtin.copy:
+    src: btop.conf
+    dest: ~/.config/btop/btop.conf
+    mode: "0644"
