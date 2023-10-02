@@ -4,7 +4,7 @@ set shiftwidth=4
 set expandtab
 set number
 set relativenumber
-set colorcolumn="79"
+set colorcolumn=79
 set nohlsearch
 set ignorecase
 set smartcase
@@ -21,16 +21,12 @@ set syntax=on
 nnoremap <Space> <Nop>
 vnoremap <Space> <Nop>
 
-nnoremap { {zz
-nnoremap } }zz
 nnoremap <C-u> <C-u>zz
-nnoremap <C-d> <C-d>zz
-
-vnoremap { {zz
-vnoremap } }zz
 vnoremap <C-u> <C-u>zz
+nnoremap <C-d> <C-d>zz
 vnoremap <C-d> <C-d>zz
-vnoremap p "_dp
+
+xnoremap p "_dP
 
 augroup returnCursor
     autocmd!
