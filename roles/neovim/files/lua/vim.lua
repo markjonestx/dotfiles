@@ -22,12 +22,11 @@ set.termguicolors = true
 
 vim.cmd([[
     augroup returnCursor
-        autocmd!
-        autocmd BufReadPost *
-            \ if &filetype !~# '^\(commit\|git\|fugitive\|gitcommit\|gitrebase\|svn\|hg\|diff\)$'
-            \ && line("'\"") > 0 && line("'\"") <= line("$")
-            \ | exe "normal! g`\""
-            \ | endif
+        autocmd BufRead * autocmd FileType <buffer> ++once
+        \ if &ft !~# 'commit\|rebase'
+            \ && line("'\"") > 1 && line("'\"") <= line("$")
+            \ | exe 'normal! g`"' |
+        \ endif
     augroup END
 ]])
 
