@@ -21,6 +21,13 @@ set.termguicolors = true
 
 
 vim.cmd([[
+    augroup resizer
+        autocmd!
+        autocmd VimResized * :wincmd =
+    augroup END
+]])
+
+vim.cmd([[
     augroup returnCursor
         autocmd BufRead * autocmd FileType <buffer> ++once
         \ if &ft !~# 'commit\|rebase'
@@ -29,6 +36,7 @@ vim.cmd([[
         \ endif
     augroup END
 ]])
+
 
 vim.cmd([[
     augroup rustColorColumn

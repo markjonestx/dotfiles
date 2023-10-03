@@ -18,6 +18,7 @@ set timeoutlen=300
 set termguicolors
 set syntax=on
 
+
 nnoremap <Space> <Nop>
 vnoremap <Space> <Nop>
 
@@ -28,6 +29,12 @@ vnoremap <C-d> <C-d>zz
 
 xnoremap p "_dP
 
+
+augroup resizer
+    autocmd!
+    autocmd VimResized * :wincmd =
+augroup END
+
 augroup returnCursor
     autocmd BufRead * autocmd FileType <buffer> ++once
     \ if &ft !~# 'commit\|rebase'
@@ -35,6 +42,7 @@ augroup returnCursor
         \ | exe 'normal! g`"' |
     \ endif
 augroup END
+
 
 augroup rustColorColumn
     autocmd!
