@@ -39,37 +39,43 @@ vim.cmd([[
 
 
 vim.cmd([[
-    augroup rustColorColumn
+    augroup systemdServiceFile
+        autocmd!
+        autocmd BufNewFile,BufRead *.service setlocal filetype=systemd
+    augroup END
+]])
+
+vim.cmd([[
+    augroup rustFile
         autocmd!
         autocmd FileType rust setlocal colorcolumn=99
     augroup END
 ]])
 
 vim.cmd([[
-    augroup puppetIndent
+    augroup puppetFile
         autocmd!
         autocmd FileType puppet setlocal shiftwidth=2
     augroup END
 ]])
 
 vim.cmd([[
-    augroup javaColorColumn
+    augroup javaFile
         autocmd!
         autocmd FileType java setlocal colorcolumn=120
     augroup END
 ]])
 
 vim.cmd([[
-    augroup xmlIndent
+    augroup xmlFile
         autocmd!
         autocmd FileType xml setlocal expandtab&
     augroup END
 ]])
 
 vim.cmd([[
-    augroup javaIndent
+    augroup javaFile
         autocmd!
         autocmd FileType java setlocal expandtab&
     augroup END
 ]])
-

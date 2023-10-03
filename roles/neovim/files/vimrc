@@ -45,27 +45,32 @@ augroup returnCursor
 augroup END
 
 
-augroup rustColorColumn
+augroup systemdServiceFile
+    autocmd!
+    autocmd BufNewFile,BufRead *.service setlocal filetype=systemd
+augroup END
+
+augroup rustFile
     autocmd!
     autocmd FileType rust setlocal colorcolumn=99
 augroup END
 
-augroup puppetIndent
+augroup puppetFile
     autocmd!
     autocmd FileType puppet setlocal shiftwidth=2
 augroup END
 
-augroup javaColorColumn
+augroup javaFile
     autocmd!
     autocmd FileType java setlocal colorcolumn=120
 augroup END
 
-augroup xmlIndent
+augroup xmlFile
     autocmd!
     autocmd FileType xml setlocal expandtab&
 augroup END
 
-augroup javaIndent
+augroup javaFile
     autocmd!
     autocmd FileType java setlocal expandtab&
 augroup END
