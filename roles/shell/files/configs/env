@@ -27,6 +27,9 @@ if [ -d "$HOME/.local/go/bin" ]; then
     export PATH=$HOME/.local/go/bin:$PATH
 fi
 
+# Use the system set Java (Fixes maven)
+export JAVA_HOME="${$(readlink -f $(which javac))%/*/*}"
+
 if [ -d "$HOME/.cargo" ]; then
     . "$HOME/.cargo/env"
 fi
