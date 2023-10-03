@@ -49,17 +49,26 @@ return require('packer').startup(function(use)
     use 'onsails/lspkind.nvim'
 
     -- Dadbod (Databases, cause I'm crazy
-    use 'tpope/vim-dadbod'
-    use 'kristijanhusak/vim-dadbod-ui'
+    use {
+            'kristijanhusak/vim-dadbod-ui',
+            requires = 'tpope/vim-dadbod',
+            cmd = { 'DBUIToggle', 'DBUIAddConnection', 'DBUI', 'DBUIFindBuffer' },
+    }
 
     -- Github Copilot, for intelligent autofill- where it makes sense
     use 'github/copilot.vim'
 
     -- R integration
-    use 'jalvesaq/Nvim-R'
+    use {
+        'jalvesaq/Nvim-R',
+        ft = {'r', 'rmd', 'rnoweb'},
+    }
 
     -- Fugitive for git integration
-    use 'tpope/vim-fugitive'
+    use {
+        'tpope/vim-fugitive',
+        cmd = {'Git'},
+    }
 
     -- Gitsigns for git integration
     use 'lewis6991/gitsigns.nvim'
