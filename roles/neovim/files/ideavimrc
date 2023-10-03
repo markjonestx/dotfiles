@@ -1,0 +1,18 @@
+" Setup basic vim commands
+set number
+set relativenumber
+set nohlsearch
+set ignorecase
+set smartcase
+
+nnoremap <Space> <Nop>
+vnoremap <Space> <Nop>
+
+vnoremap <C-u> <C-u>zz
+nnoremap <C-d> <C-d>zz
+vnoremap <C-d> <C-d>zz
+nnoremap <leader>fd :action GotoFile<CR>
+nnoremap <leader>rg :action TextSearchAction<CR>
+nnoremap K :action ShowDoc<CR>
+
+xnoremap p "_dP
