@@ -11,6 +11,9 @@ vnoremap <Space> <Nop>
 vnoremap <C-u> <C-u>zz
 nnoremap <C-d> <C-d>zz
 vnoremap <C-d> <C-d>zz
+nnoremap <C-w>v <C-w>v<C-w>l
+nnoremap <C-w>s <C-w>s<C-w>j
+
 nnoremap <leader>fd :action GotoFile<CR>
 nnoremap <leader>rg :action TextSearchAction<CR>
 nnoremap K :action ShowDoc<CR>

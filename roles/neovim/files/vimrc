@@ -29,6 +29,7 @@ vnoremap <C-d> <C-d>zz
 
 xnoremap p "_dP
 nnoremap <C-w>v <C-w>v<C-w>l
+nnoremap <C-w>s <C-w>s<C-w>j
 
 augroup resizer
     autocmd!
