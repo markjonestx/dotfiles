@@ -28,7 +28,9 @@ if [ -d "$HOME/.local/go/bin" ]; then
 fi
 
 # Use the system set Java (Fixes maven)
-export JAVA_HOME="${$(readlink -f $(which javac))%/*/*}"
+if command -v javac &> /dev/null; then
+    export JAVA_HOME="${$(readlink -f $(which javac))%/*/*}"
+fi
 
 if [ -d "$HOME/.cargo" ]; then
     . "$HOME/.cargo/env"
