@@ -23,6 +23,16 @@ if [ -d "$HOME/.local/bin" ]; then
     export PATH=$HOME/.local/bin:$PATH
 fi
 
+# "Standard" way
+if [ -d "/opt/go/bin" ]; then
+    export PATH=/opt/go/bin:$PATH
+fi
+
+# JLab way
+if [ -d "/local/scratch/$USER/go/bin" ]; then
+    export PATH=/local/scratch/$USER/go/bin:$PATH
+fi
+
 if [ -d "$HOME/.local/go/bin" ]; then
     export PATH=$HOME/.local/go/bin:$PATH
 fi
