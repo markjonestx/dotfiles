@@ -11,11 +11,27 @@ vnoremap <Space> <Nop>
 vnoremap <C-u> <C-u>zz
 nnoremap <C-d> <C-d>zz
 vnoremap <C-d> <C-d>zz
+xnoremap p "_dP
 nnoremap <C-w>v <C-w>v<C-w>l
 nnoremap <C-w>s <C-w>s<C-w>j
 
+xnoremap <leader>x "_x
+xnoremap <leader>d "_d
+
+" Toggle Tree
+nnoremap <leader>tt :action ActivateProjectToolWindow<CR>
+
 nnoremap <leader>fd :action GotoFile<CR>
 nnoremap <leader>rg :action TextSearchAction<CR>
-nnoremap K :action ShowDoc<CR>
+nnoremap <leader><space> :action SearchEverywhere<CR>
 
-xnoremap p "_dP
+nnoremap gd :action GotoDeclaration<CR>
+nnoremap gr :action GotoRelatedSymbol<CR>
+nnoremap gi :action GotoImplementation<CR>
+nnoremap K :action ShowDocInfo<CR>
+nnoremap <leader>ca :action ShowIntentionActions<CR>
+nnoremap <leader>rn :action RenameElement<CR>
+nnoremap <leader>f :action ReformatCode<CR>
+
+nnoremap ]d :action NextOccurrence<CR>
+nnoremap [d :action PreviousOccurrence<CR>
