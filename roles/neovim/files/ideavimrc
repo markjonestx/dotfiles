@@ -4,6 +4,7 @@ set relativenumber
 set nohlsearch
 set ignorecase
 set smartcase
+set clipboard+=unnamed
 
 nnoremap <Space> <Nop>
 vnoremap <Space> <Nop>
