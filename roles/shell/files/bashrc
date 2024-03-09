@@ -6,8 +6,8 @@ case $- in
     *) return;;
 esac
 
-# Switch to zsh iff it's available, otherwise stay here.
-if command -v zsh &> /dev/null
+# Switch to zsh iff it's available and USE_BASH is not true, otherwise stay here.
+if command -v zsh &> /dev/null && [[ -z $USE_BASH ]];
 then
     export SHELL=$(which zsh)
     exec zsh -l
