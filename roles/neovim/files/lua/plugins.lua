@@ -21,6 +21,27 @@ return require('packer').startup(function(use)
         },
     }
 
+    -- Better clipboard with OSC52
+    use {
+        'ojroques/nvim-osc52',
+        cond = function()
+            return vim.fn.has('nvim-0.10.0') ~= 1
+        end,
+        config = function()
+            require('osc52').setup {
+                tmux_passthrough = true,
+            }
+
+            function copy()
+              if vim.v.event.operator == 'y' and vim.v.event.regname == '+' then
+                require('osc52').copy_register('+')
+              end
+            end
+
+            vim.api.nvim_create_autocmd('TextYankPost', {callback = copy})
+        end,
+    }
+
     -- Git Completions
     use { "petertriho/cmp-git", requires  = "nvim-lua/plenary.nvim" }
 
@@ -32,9 +53,12 @@ return require('packer').startup(function(use)
 
     -- Telescope
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.3',
+        'nvim-telescope/telescope.nvim', tag = '0.1.5',
         requires = { {'nvim-lua/plenary.nvim'} },
     }
+
+    -- Devicons
+    use 'nvim-tree/nvim-web-devicons'
 
     -- Nvim Code Actions Menu
     use {
@@ -57,12 +81,6 @@ return require('packer').startup(function(use)
 
     -- Github Copilot, for intelligent autofill- where it makes sense
     use 'github/copilot.vim'
-
-    -- R integration
-    use {
-        'jalvesaq/Nvim-R',
-        ft = {'r', 'rmd', 'rnoweb'},
-    }
 
     -- Fugitive for git integration
     use {
