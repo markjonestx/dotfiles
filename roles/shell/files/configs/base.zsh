@@ -43,6 +43,11 @@ if [[ "$(echo $ZSH_VERSION | awk -F. '{ printf("%d%03d", $1,$2)}')" -ge 5001 ]];
     fi
 fi
 
+# Add support for iterm2 if the system has it installed
+if [ -f "${HOME}/.iterm2_shell_integration.zsh" ]; then
+    source "${HOME}/.iterm2_shell_integration.zsh"
+fi
+
 # Saving my home folder from all the ZCompDumps
 if [[ ! -d "${XDG_CACHE_HOME:-$HOME/.cache}/zcompdump/" ]]; then
     mkdir "${XDG_CACHE_HOME:-$HOME/.cache}/zcompdump/"
