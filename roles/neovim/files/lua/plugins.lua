@@ -99,7 +99,6 @@ return require('packer').startup(function(use)
 
     -- NVIM Tree
     use "nvim-tree/nvim-tree.lua"
-    use "nvim-tree/nvim-web-devicons"
 
     -- Lualine for statusline
     use {
