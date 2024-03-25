@@ -1,0 +1,79 @@
+# vim: ft=yaml.ansible
+---
+- name: Check if yabai is installed
+  ansible.builtin.command:
+    cmd: which yabai
+  changed_when: false
+  register: yabai_installed
+
+- name: Install yabai
+  ansible.builtin.homebrew:
+    name: koekeishiya/formulae/yabai
+    state: present
+  register: yabai_brew
+  when: not yabai_installed.rc == 0
+
+- name: Install Yabai Service  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: yabai --install-service
+  register: yabai_service
+  changed_when: yabai_service.rc == 0
+  when: yabai_brew.changed
+
+- name: Upgrade yabai  # noqa: package-latest
+  ansible.builtin.homebrew:
+    name: koekeishiya/formulae/yabai
+    state: latest
+  register: yabai_brew
+  when: (yabai_installed.rc == 0) and not yabai_brew.changed
+
+- name: Create yabai's configuration directory
+  ansible.builtin.file:
+    path: ~/.config/yabai
+    state: directory
+    mode: "0755"
+  when: yabai_brew.changed or yabai_installed.rc == 0
+
+- name: Copy yabai preferences
+  ansible.builtin.copy:
+    src: files/yabairc
+    dest: ~/.config/yabai/yabairc
+    mode: "0644"
+  when: yabai_brew.changed or yabai_installed.rc == 0
+  register: yabai_config
+
+- name: Calculate sha256 of yabai  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: shasum -a 256 {{ yabai_installed.stdout }}
+  changed_when: false
+  register: yabai_sha256
+  when: yabai_brew.changed
+
+- name: Extract checksum from command output  # noqa: no-handler
+  ansible.builtin.set_fact:
+    yabai_sha256: "{{ yabai_sha256.stdout.split(' ')[0] }}"
+  when: yabai_brew.changed
+
+- name: Get current user name  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: whoami
+  register: current_user
+  changed_when: false
+  when: yabai_brew.changed
+
+- name: Create sudoers file for yabai
+  ansible.builtin.lineinfile:
+    path: /private/etc/sudoers.d/yabai
+    line: "{{ whoami.stdout }} ALL=(root) NOPASSWD: sha256:{{ yabai_checksum }} {{ yabai_path.stdout }} --load-sa"
+    mode: "0440"
+    owner: root
+    group: wheel
+    validate: '/usr/sbin/visudo -cf %s'
+  when: yabai_brew.changed and use_sudo
+  become: true
+
+- name: Toggle the yabai service  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: yabai --stop-service; yabai --start-service
+  changed_when: yabai_brew.changed
+  when: yabai_brew.changed or yabai_config.changed
