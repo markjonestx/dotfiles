@@ -1,15 +1,33 @@
 # vim: ft=yaml.ansible
 ---
+- name: Check current taps
+  ansible.builtin.command:
+    cmd: brew tap
+  changed_when: false
+  register: brew_taps
+
+- name: Check if koekeishiya/formulae tap is installed
+  ansible.builtin.set_fact:
+    tap_installed: "{{ 'koekeishiya/formulae' in brew_taps.stdout }}"
+  changed_when: false
+
+- name: Install koekeishiya/formulae tap
+  ansible.builtin.command:
+    cmd: brew tapkoekeishiya/formulae
+  changed_when: not tap_installed
+  when: not tap_installed
+
 - name: Check if yabai is installed
   ansible.builtin.command:
     cmd: which yabai
   changed_when: false
+  ignore_errors: true
   register: yabai_installed
 
 - name: Install yabai
-  ansible.builtin.homebrew:
-    name: koekeishiya/formulae/yabai
-    state: present
+  ansible.builtin.command:
+    cmd: brew install yabai
+  changed_when: '"Installing" in yabai_brew.stdout'
   register: yabai_brew
   when: not yabai_installed.rc == 0
 
@@ -74,6 +92,6 @@
 
 - name: Toggle the yabai service  # noqa: no-handler
   ansible.builtin.command:
-    cmd: yabai --stop-service; yabai --start-service
+    cmd: "yabai --stop-service; yabai --start-service"
   changed_when: yabai_brew.changed
   when: yabai_brew.changed or yabai_config.changed

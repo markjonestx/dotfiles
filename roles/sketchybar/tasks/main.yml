@@ -6,29 +6,54 @@
   changed_when: false
   register: brew_taps
 
-- name: Check if koekeishiya/formulae tap is installed
+- name: Check if FelixKratz/formulae tap is installed
   ansible.builtin.set_fact:
-    koekeishiya_tap_installed: "{{ 'koekeishiya/formulae' in brew_taps.stdout }}"
+    tap_installed: "{{ 'felixkratz/formulae' in brew_taps.stdout }}"
   changed_when: false
 
-- name: Install koekeishiya/formulae tap
+- name: Install FelixKratz/formulae tap
   ansible.builtin.command:
-    cmd: brew tap koekeishiya/formulae
-  changed_when: not koekeishiya_tap_installed
-  when: not koekeishiya_tap_installed
+    cmd: brew tap FelixKratz/formulae
+  changed_when: not tap_installed
+  when: not tap_installed
 
 - name: Check if sketchybar is installed
   ansible.builtin.command:
     cmd: which sketchybar
   changed_when: false
+  ignore_errors: true
   register: sketchybar_installed
 
 - name: Install sketchybar
-  ansible.builtin.homebrew:
-    name: sketchybar
-    state: present
+  ansible.builtin.command:
+    cmd: brew install sketchybar
   register: sketchybar_brew
+  changed_when: '"Installing" in sketchybar_brew.stdout'
   when: not sketchybar_installed.rc == 0
+
+- name: Install lua (required for theme)
+  ansible.builtin.command:
+    cmd: brew install lua
+  register: lua_brew
+  changed_when: '"Pouring" in lua_brew.stdout'
+
+- name: Install swtichaudio-osx (required for theme)
+  ansible.builtin.command:
+    cmd: brew install switchaudio-osx
+  register: switchaudio_brew
+  changed_when: '"Pouring" in switchaudio_brew.stdout'
+
+- name: Install nowplaying-cli (required for theme)
+  ansible.builtin.command:
+    cmd: brew install nowplaying-cli
+  register: lua_brew
+  changed_when: '"Pouring" in lua_brew.stdout'
+
+- name: Install sf-symbols (required for theme)
+  ansible.builtin.command:
+    cmd: brew install --cask sf-symbols
+  register: lua_brew
+  changed_when: '"Installing" in lua_brew.stdout'
 
 - name: Install sketchybar Service  # noqa: no-handler
   ansible.builtin.command:

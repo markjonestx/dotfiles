@@ -7,8 +7,8 @@
 # see this wiki page for information:
 #  - https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#configure-scripting-addition
 #
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
-sudo yabai --load-sa
+# yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+# sudo yabai --load-sa
 #
 
 # global settings
@@ -16,7 +16,7 @@ yabai -m config                                 \
     external_bar                 on:24:0        \
     menubar_opacity              1.0            \
     mouse_follows_focus          on             \
-    focus_follows_mouse          autoraise      \
+    focus_follows_mouse          autofocus      \
     display_arrangement_order    default        \
     window_origin_display        default        \
     window_placement             second_child   \

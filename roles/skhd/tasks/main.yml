@@ -1,16 +1,34 @@
 # vim: ft=yaml.ansible
 ---
+- name: Check current taps
+  ansible.builtin.command:
+    cmd: brew tap
+  changed_when: false
+  register: brew_taps
+
+- name: Check if koekeishiya/formulae tap is installed
+  ansible.builtin.set_fact:
+    tap_installed: "{{ 'koekeishiya/formulae' in brew_taps.stdout }}"
+  changed_when: false
+
+- name: Install koekeishiya/formulae tap
+  ansible.builtin.command:
+    cmd: brew tapkoekeishiya/formulae
+  changed_when: not tap_installed
+  when: not tap_installed
+
 - name: Check if skhd is installed
   ansible.builtin.command:
     cmd: which skhd
+  ignore_errors: true
   changed_when: false
   register: skhd_installed
 
 - name: Install skhd
-  ansible.builtin.homebrew:
-    name: koekeishiya/formulae/skhd
-    state: present
+  ansible.builtin.command:
+    cmd: brew install skhd
   register: skhd_brew
+  changed_when: '"Installing" in skhd_brew.stdout'
   when: not skhd_installed.rc == 0
 
 - name: Install skhd Service  # noqa: no-handler
