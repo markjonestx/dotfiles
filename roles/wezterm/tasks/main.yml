@@ -1,6 +1,15 @@
 # vim: ft=yaml.ansible
 ---
+- name: Check if WezTerm is installed
+  ansible.builtin.command:
+    cmd: wezterm --version
+  register: wezterm_exists
+  changed_when: false
+  ignore_errors: true
+
 - name: Copy Wez's configuration file
   ansible.builtin.copy:
     src: wezterm.lua
     dest: ~/.wezterm.lua
+    mode: "0644"
+  when: wezterm_exists.rc == 0

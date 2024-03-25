@@ -1,44 +1,78 @@
 # vim: ft=yaml.ansible
 ---
+- name: Check if neovim is installed
+  ansible.builtin.command:
+    cmd: nvim --version
+  register: neovim_exists
+  changed_when: false
+  ignore_errors: true
+
+- name: Install Neovim
+  ansible.builtin.package:
+    name: neovim
+    state: present
+  when: neovim_exists.rc != 0 and install_software
+  register: neovim_installed
+
 - name: Create the Neovim configuration directory
   ansible.builtin.file:
     path: ~/.config/nvim
     state: directory
-    mode: 0755
+    mode: "0755"
+  when: neovim_exists.rc == 0 or neovim_installed.changed
 
 - name: Copy the init file for Neovim
   ansible.builtin.copy:
     src: init.lua
     dest: ~/.config/nvim/init.lua
+    mode: "0644"
+  when: neovim_exists.rc == 0 or neovim_installed.changed
 
 - name: Copy the configuration for Neovim
   ansible.builtin.copy:
     src: lua/
     dest: ~/.config/nvim/lua
+    mode: "0644"
+  when: neovim_exists.rc == 0 or neovim_installed.changed
 
-- name: Install Packer plugin manager
+- name: Install Packer plugin manager  # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/wbthomason/packer.nvim.git
     dest: ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+  when: neovim_exists.rc == 0 or neovim_installed.changed
 
 - name: Finalize Neovim setup
+  when: neovim_exists.rc == 0 or neovim_installed.changed
   block:
     - name: Install and Update Packer plugins
       ansible.builtin.shell: |
         nvim --headless \
           -c 'autocmd User PackerComplete quitall' \
           -c 'PackerSync'
+      register: packer_sync
+      changed_when: '"Downloading" in packer_sync.stdout'
+      timeout: 120
   rescue:
     - name: Silence Error
       ansible.builtin.debug:
         msg: "Packer will have to be synced/updated manually. ':PackerSync' ':PackerUpdate'"
 
+- name: Check if vim is installed
+  ansible.builtin.command:
+    cmd: vim --version
+  register: vim_exists
+  changed_when: false
+  ignore_errors: true
+
 - name: Copy the default vim configuration
   ansible.builtin.copy:
     src: vimrc
     dest: ~/.vimrc
+    mode: "0644"
+  when: vim_exists.rc == 0
 
 - name: Copy the default Intellij vim configuration
   ansible.builtin.copy:
     src: ideavimrc
     dest: ~/.ideavimrc
+    mode: "0644"

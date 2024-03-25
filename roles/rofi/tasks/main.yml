@@ -1,13 +1,29 @@
 # vim: ft=yaml.ansible
 ---
+- name: Check if rofi is installed
+  ansible.builtin.command:
+    cmd: rofi --version
+  register: rofi_exists
+  changed_when: false
+  ignore_errors: true
+
+- name: Install rofi
+  ansible.builtin.package:
+    name: rofi
+    state: present
+  when: rofi_exists.rc != 0 and install_software
+  register: rofi_installed
+
 - name: Create Rofi's configuration directory
   ansible.builtin.file:
     path: ~/.config/rofi
     state: directory
-    mode: 0755
+    mode: "0755"
+  when: rofi_exists.rc == 0 or rofi_installed.changed
 
 - name: Copy the rofi config
   ansible.builtin.copy:
     src: rofi/
     dest: ~/.config/rofi
-
+    mode: "0644"
+  when: rofi_exists.rc == 0 or rofi_installed.changed

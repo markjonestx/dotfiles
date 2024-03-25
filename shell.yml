@@ -6,9 +6,9 @@
     install_software: false
 
   roles:
+    - role: git
     - role: bat
     - role: btop
-    - role: git
     - role: neovim
     - role: shell
     - role: tmux

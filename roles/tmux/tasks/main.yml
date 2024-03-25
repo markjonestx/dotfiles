@@ -1,35 +1,59 @@
 # vim: ft=yaml.ansible
 ---
+- name: Check if tmux is installed
+  ansible.builtin.command:
+    cmd: tmux -V
+  register: tmux_exists
+  changed_when: false
+  ignore_errors: true
+
+- name: Install tmux
+  ansible.builtin.package:
+    name: tmux
+    state: present
+  when: tmux_exists.rc != 0 and install_software
+  register: tmux_installed
+
 - name: Create tmux's configuration directory
   ansible.builtin.file:
     path: ~/.config/tmux
-    mode: 0755
+    mode: "0755"
     state: directory
+  when: tmux_exists.rc == 0 or tmux_installed.changed
 
 - name: Copy tmux's configuration file
   ansible.builtin.copy:
     src: tmux.conf
     dest: ~/.config/tmux/tmux.conf
+    mode: "0644"
+  when: tmux_exists.rc == 0 or tmux_installed.changed
 
 - name: Link tmux configuration file for legacy support
   ansible.builtin.file:
     src: ~/.config/tmux/tmux.conf
     dest: ~/.tmux.conf
     state: link
+  when: tmux_exists.rc == 0 or tmux_installed.changed
 
-- name: Download the tmux plugin manager
+- name: Download the tmux plugin manager  # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/tmux-plugins/tpm
     dest: ~/.config/tmux/plugins/tpm
+  when: tmux_exists.rc == 0 or tmux_installed.changed
 
 - name: Install tmux plugins
   block:
     - name: Running TPM's install scripts
-      ansible.builtin.shell: ~/.config/tmux/plugins/tpm/bin/install_plugins
+      ansible.builtin.command: ~/.config/tmux/plugins/tpm/bin/install_plugins
+      register: tpm_installed
+      changed_when: '"Installing" in tpm_installed.stdout'
+
     - name: Running TPM's update scripts
-      ansible.builtin.shell: ~/.config/tmux/plugins/tpm/bin/update_plugins all
+      ansible.builtin.command: ~/.config/tmux/plugins/tpm/bin/update_plugins all
+      register: tpm_updated
+      changed_when: '"Fast-forward" in tpm_updated.stdout'
+
   rescue:
     - name: Silence tmux errors
       ansible.builtin.debug:
         msg: "Manually install plugins with <prefix>+I"
-

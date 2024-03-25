@@ -1,12 +1,29 @@
 # vim: ft=yaml.ansible
 ---
-- name: Install the Catppuccin theme
+- name: Check if btop is installed
+  ansible.builtin.command:
+    cmd: btop --version
+  register: btop_exists
+  changed_when: false
+  ignore_errors: true
+
+- name: Install btop
+  ansible.builtin.package:
+    name: btop
+    state: present
+  when: btop_exists.rc != 0 and install_software
+  register: btop_installed
+
+- name: Install the Catppuccin theme  # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/catppuccin/btop.git
     dest: ~/.config/btop
+    update: true
+  when: btop_exists.rc == 0 or btop_installed.changed
 
 - name: Copy over the btop configuration file
   ansible.builtin.copy:
     src: btop.conf
     dest: ~/.config/btop/btop.conf
     mode: "0644"
+  when: btop_exists.rc == 0 or btop_installed.changed

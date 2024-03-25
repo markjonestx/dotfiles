@@ -1,6 +1,22 @@
 # vim: ft=yaml.ansible
 ---
+- name: Check if git is installed  # noqa: command-instead-of-module
+  ansible.builtin.command:
+    cmd: git --version
+  register: git_exists
+  changed_when: false
+  ignore_errors: true
+
+- name: Install git
+  ansible.builtin.package:
+    name: git
+    state: present
+  when: git_exists.rc != 0 and install_software
+  register: git_installed
+
 - name: Copy over the git config
   ansible.builtin.template:
     src: config.j2
     dest: ~/.gitconfig
+    mode: "0644"
+  when: git_exists.rc == 0 or git_installed.changed
