@@ -90,7 +90,11 @@ function detect-clipboard() {
       if detect-clipboard; then
         "${clipcmd}" "$@"
       else
-        print "${clipcmd}: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
+
+        # Fail over to OSC 52 escape sequence
+        function clipcopy() { printf "\e]52;c;$(base64 < "${1:-/dev/stdin}")\a"; }
+        function clippaste() { print "Paste OSC 52 escape sequence not supported" >&2; return 1;}
+
         return 1
       fi
     }
