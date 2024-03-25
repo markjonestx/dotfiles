@@ -11,7 +11,7 @@
   ansible.builtin.package:
     name: btop
     state: present
-  when: btop_exists.rc != 0 and install_software
+  when: btop_exists.rc != 0 and use_sudo
   register: btop_installed
 
 - name: Install the Catppuccin theme  # noqa: latest[git]

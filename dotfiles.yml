@@ -3,7 +3,7 @@
 - name: Setup dotfiles and software
   hosts: all
   vars:
-    install_software: false
+    use_sudo: false
 
   roles:
     - role: homebrew

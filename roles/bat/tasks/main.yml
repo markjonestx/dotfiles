@@ -11,7 +11,7 @@
   ansible.builtin.package:
     name: bat
     state: present
-  when: bat_exists.rc != 0 and install_software
+  when: bat_exists.rc != 0 and use_sudo
   register: bat_installed
 
 - name: Create the directory where bat's config lives

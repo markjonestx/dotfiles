@@ -11,7 +11,7 @@
   ansible.builtin.package:
     name: git
     state: present
-  when: git_exists.rc != 0 and install_software
+  when: git_exists.rc != 0 and use_sudo
   register: git_installed
 
 - name: Copy over the git config

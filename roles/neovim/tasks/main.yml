@@ -11,7 +11,7 @@
   ansible.builtin.package:
     name: neovim
     state: present
-  when: neovim_exists.rc != 0 and install_software
+  when: neovim_exists.rc != 0 and use_sudo
   register: neovim_installed
 
 - name: Create the Neovim configuration directory

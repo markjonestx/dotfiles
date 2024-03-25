@@ -11,7 +11,7 @@
   ansible.builtin.package:
     name: i3
     state: present
-  when: i3_exists.rc != 0 and install_software
+  when: i3_exists.rc != 0 and use_sudo
   register: i3_installed
 
 - name: Create i3 config directory
