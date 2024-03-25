@@ -8,18 +8,38 @@
   roles:
     - role: homebrew
       when: ansible_facts['os_family'] == 'Darwin'
+      tags: homebrew
+
     - role: git
+      tags: git
+
     - role: bat
+      tags: bat
+
     - role: btop
+      tags: btop
+
     - role: neovim
+      tags: neovim
+
     - role: shell
+      tags: shell
+
     - role: tmux
+      tags: tmux
 
     # Setup Desktop environment
     - role: i3
       when: ansible_facts['os_family'] != 'Darwin'
+      tags: i3
+
     - role: rofi
       when: ansible_facts['os_family'] != 'Darwin'
+      tags: rofi
+
     - role: wezterm
+      tags: wezterm
+
     - role: iterm2
       when: ansible_facts['os_family'] == 'Darwin'
+      tags: iterm2
