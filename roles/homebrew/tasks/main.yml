@@ -1,0 +1,18 @@
+# vim: ft=yaml.ansible
+---
+- name: Check if homebrew is installed [amd64]
+  ansible.builtin.stat:
+    path: /usr/local/bin/brew
+  register: homebrew_installed
+  when: ansible_architecture == 'x86_64'
+
+- name: Check if homebrew is installed [apple silicon]
+  ansible.builtin.stat:
+    path: /opt/homebrew
+  register: homebrew_installed
+  when: ansible_architecture == 'arm64'
+
+- name: Error if homebrew is not installed
+  ansible.builtin.fail:
+    msg: "Homebrew is not installed, please install it first."
+  when: not homebrew_installed.stat.exists
