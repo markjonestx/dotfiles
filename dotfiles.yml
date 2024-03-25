@@ -1,15 +1,21 @@
 # vim: ft=yaml.ansible
 ---
-- name: Setup Desktop environment
+- name: Setup dotfiles and software
   hosts: all
   vars:
     install_software: false
+
   roles:
+    - role: git
+    - role: bat
+    - role: btop
+    - role: neovim
+    - role: shell
+    - role: tmux
+
+    # Setup Desktop environment
     - role: i3
       when: ansible_facts['os_family'] != 'Darwin'
     - role: rofi
       when: ansible_facts['os_family'] != 'Darwin'
     - role: wezterm
-
-- name: Include the shell playbook
-  ansible.builtin.import_playbook: shell.yml
