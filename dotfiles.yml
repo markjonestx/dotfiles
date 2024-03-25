@@ -21,3 +21,5 @@
     - role: rofi
       when: ansible_facts['os_family'] != 'Darwin'
     - role: wezterm
+    - role: iterm2
+      when: ansible_facts['os_family'] == 'Darwin'

@@ -1,0 +1,19 @@
+# vim: ft=yaml.ansible
+---
+- name: Check if iterm2 is installed
+  ansible.builtin.stat:
+    path: /Applications/iTerm.app
+  register: iterm2_installed
+
+- name: Install iterm2
+  ansible.builtin.homebrew:
+    name: iterm2
+    state: present
+  when: not iterm2_installed.stat.exists
+
+- name: Copy iterm2 preferences
+  ansible.builtin.copy:
+    src: files/com.googlecode.iterm2.plist
+    dest: ~/Library/Preferences/com.googlecode.iterm2.plist
+    mode: "0644"
+  when: iterm2_installed.stat.exists
