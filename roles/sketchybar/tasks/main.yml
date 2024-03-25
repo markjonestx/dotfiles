@@ -1,0 +1,72 @@
+# vim: ft=yaml.ansible
+---
+- name: Check current taps
+  ansible.builtin.command:
+    cmd: brew tap
+  changed_when: false
+  register: brew_taps
+
+- name: Check if koekeishiya/formulae tap is installed
+  ansible.builtin.set_fact:
+    koekeishiya_tap_installed: "{{ 'koekeishiya/formulae' in brew_taps.stdout }}"
+  changed_when: false
+
+- name: Install koekeishiya/formulae tap
+  ansible.builtin.command:
+    cmd: brew tap koekeishiya/formulae
+  changed_when: not koekeishiya_tap_installed
+  when: not koekeishiya_tap_installed
+
+- name: Check if sketchybar is installed
+  ansible.builtin.command:
+    cmd: which sketchybar
+  changed_when: false
+  register: sketchybar_installed
+
+- name: Install sketchybar
+  ansible.builtin.homebrew:
+    name: sketchybar
+    state: present
+  register: sketchybar_brew
+  when: not sketchybar_installed.rc == 0
+
+- name: Install sketchybar Service  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: sketchybar --install-service
+  register: sketchybar_service
+  changed_when: sketchybar_service.rc == 0
+  when: sketchybar_brew.changed
+
+- name: Upgrade sketchybar  # noqa: package-latest
+  ansible.builtin.homebrew:
+    name: sketchybar
+    state: latest
+  register: sketchybar_brew
+  when: (sketchybar_installed.rc == 0) and not sketchybar_brew.changed
+
+- name: Create sketchybar's configuration directory
+  ansible.builtin.file:
+    path: ~/.config/sketchybar
+    state: directory
+    mode: "0755"
+  when: sketchybar_brew.changed or sketchybar_installed.rc == 0
+
+- name: Copy the configuration for Sketchybar
+  ansible.builtin.copy:
+    src: sketchy/
+    dest: ~/.config/sketchybar
+    mode: "0644"
+  register: sketchybar_config
+  when: sketchybar_brew.changed or sketchybar_installed.rc == 0
+
+- name: Reload sketchybar configuration  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: sketchybar --reload
+  changed_when: sketchybar_config.changed
+  when: sketchybar_config.changed and not sketchybar_brew.changed
+
+- name: Toggle the sketchybar service  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: sketchybar --stop-service; sketchybar --start-service
+  changed_when: sketchybar_brew.changed
+  when: sketchybar_brew.changed
