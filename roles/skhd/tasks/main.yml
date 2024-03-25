@@ -1,0 +1,55 @@
+# vim: ft=yaml.ansible
+---
+- name: Check if skhd is installed
+  ansible.builtin.command:
+    cmd: which skhd
+  changed_when: false
+  register: skhd_installed
+
+- name: Install skhd
+  ansible.builtin.homebrew:
+    name: koekeishiya/formulae/skhd
+    state: present
+  register: skhd_brew
+  when: not skhd_installed.rc == 0
+
+- name: Install skhd Service  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: skhd --install-service
+  register: skhd_service
+  changed_when: skhd_service.rc == 0
+  when: skhd_brew.changed
+
+- name: Upgrade skhd  # noqa: package-latest
+  ansible.builtin.homebrew:
+    name: koekeishiya/formulae/skhd
+    state: latest
+  register: skhd_brew
+  when: (skhd_installed.rc == 0) and not skhd_brew.changed
+
+- name: Create skhd's configuration directory
+  ansible.builtin.file:
+    path: ~/.config/skhd
+    state: directory
+    mode: "0755"
+  when: skhd_brew.changed or skhd_installed.rc == 0
+
+- name: Copy skhd preferences
+  ansible.builtin.copy:
+    src: files/skhdrc
+    dest: ~/.config/skhd/skhdrc
+    mode: "0644"
+  when: skhd_brew.changed or skhd_installed.rc == 0
+  register: skhd_config
+
+- name: Reload skhd configuration  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: skhd --reload
+  changed_when: skhd_config.changed
+  when: skhd_config.changed and not skhd_brew.changed
+
+- name: Toggle the skhd service  # noqa: no-handler
+  ansible.builtin.command:
+    cmd: skhd --stop-service; skhd --start-service
+  changed_when: skhd_brew.changed
+  when: skhd_brew.changed

@@ -47,3 +47,7 @@
     - role: yabai
       when: ansible_facts['os_family'] == 'Darwin'
       tags: yabai
+
+    - role: skhd
+      when: ansible_facts['os_family'] == 'Darwin'
+      tags: skhd
