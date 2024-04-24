@@ -26,8 +26,20 @@ if [[ "$(echo $ZSH_VERSION | awk -F. '{ printf("%d%03d", $1,$2)}')" -ge 5001 ]];
 
     # Setup Antidote and it's plugins
     zsh_plugins=$HOME/.shell.d/zsh_plugins
-    source $HOME/.shell.d/antidote/antidote.zsh
-    antidote load $zsh_plugins
+    zsh_plugins_path=$HOME/.shell.d/plugins/$HOSTNAME.zsh
+
+    fpath=($HOME/.shell.d/antidote/functions $fpath)
+    autoload -Uz antidote
+
+    if ! [[ -d $HOME/.shell.d/plugins ]]; then
+        mkdir $HOME/.shell.d/plugins
+    fi
+
+    if ! [[ -f $zsh_plugins_path ]]; then
+        antidote bundle <$zsh_plugins >| $zsh_plugins_path
+    fi
+
+    source $zsh_plugins_path
     export HASANTIDOTE=true
 
     # Required for instantaneous prompt
