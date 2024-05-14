@@ -66,6 +66,14 @@ vim.cmd([[
     augroup END
 ]])
 
+
+vim.cmd([[
+    augroup golangFile
+        autocmd!
+        autocmd FileType go setlocal colorcolumn=120
+    augroup END
+]])
+
 vim.cmd([[
     augroup xmlFile
         autocmd!
