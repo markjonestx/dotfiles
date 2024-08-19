@@ -1,6 +1,8 @@
 local autosave = require('auto-save')
 local cmp = require('cmp')
 local cmpgit = require('cmp_git')
+local copilot = require('copilot')
+local copilot_cmp = require('copilot_cmp')
 local gitsigns = require('gitsigns')
 local indent = require('guess-indent')
 local lightbulb = require('nvim-lightbulb')
@@ -10,6 +12,7 @@ local lsp_zero = require('lsp-zero')
 local mason = require('mason')
 local mason_lsp = require('mason-lspconfig')
 local trim = require('trim')
+
 
 -- Treesitter configuration
 require 'nvim-treesitter.configs'.setup {
@@ -33,6 +36,14 @@ lsp_zero.on_attach(function(client, bufnr)
     lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
+lsp_zero.extend_lspconfig({
+    capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    lsp_attach = lsp_attach,
+    float_border = 'rounded',
+    sign_text = true,
+})
+
+
 -- Mason LSP configuration
 mason.setup({
     ui = {
@@ -42,13 +53,26 @@ mason.setup({
 
 mason_lsp.setup({
     handlers = {
-        lsp_zero.default_setup,
-        lua_ls = function()
-            local lua_opts = lsp_zero.nvim_lua_ls()
-            lspconfig.lua_ls.setup(lua_opts)
+        function(server_name)
+            lspconfig[server_name].setup({})
         end,
-    }
+    },
 })
+
+-- Copilot configuration
+copilot.setup({
+    suggestion = { enabled = false },
+    panel = { enabled = false },
+})
+
+copilot_cmp.setup()
+
+local has_words_before = function()
+  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+end
+
 
 cmp.setup({
     window = {
@@ -63,7 +87,13 @@ cmp.setup({
     formatting = {
         fields = { "kind", "abbr", "menu" },
         format = function(entry, vim_item)
-            local kind = lspkind.cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+            local kind = lspkind.cmp_format({
+                mode = "symbol_text",
+                maxwidth = 50,
+                symbol_map = {
+                    Copilot = "",
+                },
+            })(entry, vim_item)
             local strings = vim.split(kind.kind, "%s", { trimempty = true })
             kind.kind = " " .. (strings[1] or "") .. " "
             kind.menu = "    (" .. (strings[2] or "") .. ")"
@@ -72,6 +102,7 @@ cmp.setup({
     },
 
     sources = {
+        {name = 'copilot'},
         {name = 'git'},
         {name = 'path'},
         {name = 'nvim_lsp'},
@@ -82,7 +113,19 @@ cmp.setup({
 
     mapping = cmp.mapping.preset.insert({
         -- Enter to confirm selection
-        ['<CR>'] = cmp.mapping.confirm({select = false}),
+        ['<CR>'] = cmp.mapping.confirm({
+            select = false,
+            behavior = cmp.ConfirmBehavior.Insert,
+        }),
+
+        -- Copilot Tab-to-complete
+        ["<Tab>"] = vim.schedule_wrap(function(fallback)
+            if cmp.visible() and has_words_before() then
+                cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+                fallback()
+            end
+        end),
 
         -- Ctrl+Space to trigger menu
         ['<C-Space>'] = cmp.mapping.complete(),
@@ -94,7 +137,26 @@ cmp.setup({
         -- Navigate the documentation
         ['<C-u>'] = cmp.mapping.scroll_docs(-4),
         ['<C-d>'] = cmp.mapping.scroll_docs(4),
-    })
+    }),
+
+  sorting = {
+        priority_weight = 2,
+        comparators = {
+           require("copilot_cmp.comparators").prioritize,
+
+           -- Below is the default comparitor list and order for nvim-cmp
+           cmp.config.compare.offset,
+           -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+           cmp.config.compare.exact,
+           cmp.config.compare.score,
+           cmp.config.compare.recently_used,
+           cmp.config.compare.locality,
+           cmp.config.compare.kind,
+           cmp.config.compare.sort_text,
+           cmp.config.compare.length,
+           cmp.config.compare.order,
+        },
+  },
 })
 
 -- Git stuffs
@@ -103,7 +165,8 @@ cmpgit.setup({
     gitlab = {
         hosts = {
             'https://git.araska.sh',
-            'https://gitlab.jlab.org'
+            'https://gitlab.jlab.org',
+            'https://code.jlab.org',
         }
     }
 })

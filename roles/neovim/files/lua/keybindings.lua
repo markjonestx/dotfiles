@@ -14,8 +14,9 @@ keymap.set('n', '<C-w>s', '<C-w>s<C-w>j')
 keymap.set('n', 'k', 'v:count == 0 ? "gk" : "k"', { expr = true, silent = true })
 keymap.set('n', 'j', 'v:count == 0 ? "gj" : "j"', { expr = true, silent = true })
 
--- NvimTree
+-- NvimTree and Undotree
 keymap.set('n', '<leader>tt', '<cmd>NvimTreeToggle<CR>')
+keymap.set('n', '<leader>tu', vim.cmd.UndotreeToggle)
 
 -- Telescope
 keymap.set('n', '<leader>rg', '<cmd>Telescope live_grep<CR>')

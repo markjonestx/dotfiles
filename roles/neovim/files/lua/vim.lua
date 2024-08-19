@@ -18,6 +18,8 @@ set.signcolumn = "yes"
 vim.updatetime = 250
 set.timeoutlen = 300
 set.termguicolors = true
+set.spell = true
+set.spelllang = "en_us"
 
 
 vim.cmd([[
@@ -87,3 +89,25 @@ vim.cmd([[
         autocmd FileType java setlocal expandtab&
     augroup END
 ]])
+
+
+vim.cmd([[
+    if has("persistent_undo")
+        if exists("$XDG_CACHE_HOME")
+            let target_path = $XDG_CACHE_HOME . "/vim_undo"
+        else
+            let target_path = $HOME . "/.vim_undo"
+        endif
+        let target_path = expand(target_path)
+
+        if !isdirectory(target_path)
+            call mkdir(target_path, "p", 0700)
+        endif
+
+        let &undodir = target_path
+        set undofile
+
+        let g:undotree_WindowLayout = 2
+    endif
+]])
+

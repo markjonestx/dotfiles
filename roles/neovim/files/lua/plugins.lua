@@ -10,7 +10,7 @@ return require('packer').startup(function(use)
     -- LSP Configuration
     use {
         'VonHeikemen/lsp-zero.nvim',
-        branch = 'v3.x',
+        branch = 'v4.x',
         requires = {
             { 'neovim/nvim-lspconfig' },
             { 'williamboman/mason.nvim' },
@@ -53,9 +53,12 @@ return require('packer').startup(function(use)
 
     -- Telescope
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.5',
+        'nvim-telescope/telescope.nvim', tag = '0.1.8',
         requires = { {'nvim-lua/plenary.nvim'} },
     }
+
+    -- Undo Tree, to make my life easier
+    use 'mbbill/undotree'
 
     -- Devicons
     use 'nvim-tree/nvim-web-devicons'
@@ -80,7 +83,8 @@ return require('packer').startup(function(use)
     }
 
     -- Github Copilot, for intelligent autofill- where it makes sense
-    use 'github/copilot.vim'
+    use 'zbirenbaum/copilot.lua'
+    use 'zbirenbaum/copilot-cmp'
 
     -- Fugitive for git integration
     use {
