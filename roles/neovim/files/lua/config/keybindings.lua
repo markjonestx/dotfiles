@@ -19,12 +19,6 @@ keymap.set('n', '<leader>tt', '<cmd>NvimTreeToggle<CR>')
 keymap.set('n', '<leader>tu', vim.cmd.UndotreeToggle)
 
 -- Telescope
-keymap.set('n', '<leader>rg', '<cmd>Telescope live_grep<CR>')
-keymap.set('n', '<leader>fd', '<cmd>Telescope fd<CR>')
-keymap.set(
-    'n', '<leader>noti',
-    '<cmd>lua require("telescope").extensions.notify.notify()<CR>'
-)
 keymap.set('n', '<leader><Space>', '<cmd>Telescope buffers<CR>')
 keymap.set('n', '<leader>org', '<cmd>ObsidianSearch<CR>')
 keymap.set('n', '<leader>ofd', '<cmd>ObsidianQuickSwitch<CR>')

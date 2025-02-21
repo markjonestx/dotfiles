@@ -1,3 +1,6 @@
+-- set termguicolors
+vim.opt.termguicolors = true
+
 -- Setup basic vim commands
 local set = vim.opt
 

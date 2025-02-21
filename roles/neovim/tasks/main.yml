@@ -35,27 +35,11 @@
     mode: "0644"
   when: neovim_exists.rc == 0 or neovim_installed.changed
 
-- name: Install Packer plugin manager  # noqa: latest[git]
-  ansible.builtin.git:
-    repo: https://github.com/wbthomason/packer.nvim.git
-    dest: ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+- name: Remove old packer configuration
+  ansible.builtin.file:
+    path: ~/.local/share/nvim/site/pack/packer
+    state: absent
   when: neovim_exists.rc == 0 or neovim_installed.changed
-
-- name: Finalize Neovim setup
-  when: neovim_exists.rc == 0 or neovim_installed.changed
-  block:
-    - name: Install and Update Packer plugins
-      ansible.builtin.shell: |
-        nvim --headless \
-          -c 'autocmd User PackerComplete quitall' \
-          -c 'PackerSync'
-      register: packer_sync
-      changed_when: '"Downloading" in packer_sync.stdout'
-      timeout: 120
-  rescue:
-    - name: Silence Error
-      ansible.builtin.debug:
-        msg: "Packer will have to be synced/updated manually. ':PackerSync' ':PackerUpdate'"
 
 - name: Check if vim is installed
   ansible.builtin.command:

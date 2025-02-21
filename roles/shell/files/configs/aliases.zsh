@@ -7,16 +7,15 @@ alias lrt="ls -1ARFh"
 alias lsr="ls -lARFh"
 
 alias p=popd
+alias please=sudo
 alias gt=git
 alias grep="grep --color"
-
-if [ "$(uname -s)" = "OpenBSD" ]; then
-    alias bat='bat --no-pager --plain'
-fi
 
 if command -v batcat &> /dev/null; then
     alias bat=batcat
 fi
+
+alias bat='bat --no-pager --plain'
 
 if command -v fdfind &> /dev/null; then
     alias fd=fdfind

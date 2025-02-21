@@ -51,7 +51,3 @@
     - role: skhd
       when: ansible_facts['os_family'] == 'Darwin'
       tags: skhd
-
-    - role: sketchybar
-      when: ansible_facts['os_family'] == 'Darwin'
-      tags: sketchybar

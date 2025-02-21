@@ -1,5 +1,4 @@
-require('vim')
-require('plugins')
-require('theme')
-require('code')
-require('keybindings')
+require('config.lazy')
+require('config.vim')
+require('config.keybindings')
+
