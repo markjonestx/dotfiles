@@ -38,6 +38,6 @@
 - name: Download the catpuccin theme  # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/catppuccin/tmux.git
-    dest: ~/.config/tmux/plugins/catpuccin/tmux
+    dest: ~/.config/tmux/plugins/catppuccin/tmux
     version: v2.1.2
   when: tmux_exists.rc == 0 or tmux_installed.changed
