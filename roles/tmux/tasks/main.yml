@@ -40,4 +40,5 @@
     repo: https://github.com/catppuccin/tmux.git
     dest: ~/.config/tmux/plugins/catppuccin/tmux
     version: v2.1.2
+    force: true
   when: tmux_exists.rc == 0 or tmux_installed.changed
