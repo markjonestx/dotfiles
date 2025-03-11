@@ -12,11 +12,13 @@ local config = {
     audible_bell = "Disabled",
 
     font = wezterm.font('ComicCodeLigatures Nerd Font'),
-    font_size = 11
-}
+    font_size = 11,
 
-config.colors = {
-    background= 'black',
+    enable_wayland = false,  -- Currently broken on Fedora
+
+    colors = {
+        background= 'black',
+    }
 }
 
 return config
