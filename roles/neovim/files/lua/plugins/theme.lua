@@ -83,6 +83,7 @@ return {
     -- Notify for notifications
     {
         'rcarriga/nvim-notify',
+        name = 'notify',
         lazy = false,
         opts = { background_colour = "#000000" }
     },
@@ -90,7 +91,7 @@ return {
     -- Code Action Identifier
     {
         'kosayoda/nvim-lightbulb',
-        event = 'VeryLazy',
+        lazy = false,
         opts = { autocmd = { enabled = true }}
     },
 
@@ -98,6 +99,9 @@ return {
     { 'onsails/lspkind.nvim', event = 'VeryLazy' },
 
     -- Gitsigns for git integration
-    { 'lewis6991/gitsigns.nvim', event = 'VeryLazy' },
+    {
+        'lewis6991/gitsigns.nvim',
+        event = "BufReadPre", name = 'gitsigns'
+    },
 
 }
