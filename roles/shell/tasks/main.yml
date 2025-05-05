@@ -6,6 +6,12 @@
     dest: ~/.shell.d/
     mode: "0755"
 
+- name: Copy aliases over to the configuration directory
+  ansible.builtin.template:
+    src: aliases.zsh.j2
+    dest: ~/.shell.d/configs/aliases.zsh
+    mode: "0644"
+
 - name: Install Antidote  # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/mattmc3/antidote.git
