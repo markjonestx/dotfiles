@@ -18,12 +18,12 @@
   ansible.builtin.file:
     path: ~/.config/rofi
     state: directory
-    mode: "0755"
+    mode: "0750"
   when: rofi_exists.rc == 0 or rofi_installed.changed
 
 - name: Copy the rofi config
   ansible.builtin.copy:
     src: rofi/
     dest: ~/.config/rofi
-    mode: "0644"
+    mode: "0640"
   when: rofi_exists.rc == 0 or rofi_installed.changed

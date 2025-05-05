@@ -4,13 +4,13 @@
   ansible.builtin.copy:
     src: configs/
     dest: ~/.shell.d/
-    mode: "0755"
+    mode: "0750"
 
 - name: Copy aliases over to the configuration directory
   ansible.builtin.template:
     src: aliases.zsh.j2
     dest: ~/.shell.d/configs/aliases.zsh
-    mode: "0644"
+    mode: "0640"
 
 - name: Install Antidote  # noqa: latest[git]
   ansible.builtin.git:
@@ -22,30 +22,30 @@
   ansible.builtin.copy:
     src: zshrc
     dest: ~/.zshrc
-    mode: "0644"
+    mode: "0640"
 
 - name: Copy over the ZPROFILE file
   ansible.builtin.copy:
     src: zprofile
     dest: ~/.zprofile
-    mode: "0644"
+    mode: "0640"
 
 - name: Copy over the BASHRC file
   when: '"bash" in ansible_user_shell'
   ansible.builtin.copy:
     src: bashrc
     dest: ~/.bashrc
-    mode: "0644"
+    mode: "0640"
 
 - name: Copy over the BASH Profile file
   when: '"bash" in ansible_user_shell'
   ansible.builtin.copy:
     src: bash_profile
     dest: ~/.bash_profile
-    mode: "0644"
+    mode: "0640"
 
 - name: Copy dircolors
   ansible.builtin.copy:
     src: dircolors
     dest: ~/.dircolors
-    mode: "0644"
+    mode: "0640"

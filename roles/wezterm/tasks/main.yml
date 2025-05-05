@@ -11,5 +11,5 @@
   ansible.builtin.copy:
     src: wezterm.lua
     dest: ~/.wezterm.lua
-    mode: "0644"
+    mode: "0640"
   when: wezterm_exists.rc == 0

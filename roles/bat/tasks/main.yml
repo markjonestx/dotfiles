@@ -18,7 +18,7 @@
   ansible.builtin.file:
     dest: ~/.config/bat
     state: directory
-    mode: "0755"
+    mode: "0750"
   when: bat_exists.rc == 0 or bat_installed.changed
 
 - name: Install Catppuccin Themes  # noqa: latest[git]
@@ -33,7 +33,7 @@
   ansible.builtin.copy:
     src: config
     dest: ~/.config/bat/config
-    mode: "0644"
+    mode: "0640"
   when: bat_exists.rc == 0 or bat_installed.changed
 
 - name: Initialize bat's cache  # noqa: ignore-errors

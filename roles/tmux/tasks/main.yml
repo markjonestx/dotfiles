@@ -17,7 +17,7 @@
 - name: Create tmux's configuration directory
   ansible.builtin.file:
     path: ~/.config/tmux
-    mode: "0755"
+    mode: "0750"
     state: directory
   when: tmux_exists.rc == 0 or tmux_installed.changed
 
@@ -25,7 +25,7 @@
   ansible.builtin.copy:
     src: tmux.conf
     dest: ~/.config/tmux/tmux.conf
-    mode: "0644"
+    mode: "0640"
   when: tmux_exists.rc == 0 or tmux_installed.changed
 
 - name: Link tmux configuration file for legacy support

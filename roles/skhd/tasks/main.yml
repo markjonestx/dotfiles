@@ -49,14 +49,14 @@
   ansible.builtin.file:
     path: ~/.config/skhd
     state: directory
-    mode: "0755"
+    mode: "0750"
   when: skhd_brew.changed or skhd_installed.rc == 0
 
 - name: Copy skhd preferences
   ansible.builtin.copy:
     src: files/skhdrc
     dest: ~/.config/skhd/skhdrc
-    mode: "0644"
+    mode: "0640"
   when: skhd_brew.changed or skhd_installed.rc == 0
   register: skhd_config
 

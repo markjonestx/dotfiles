@@ -73,14 +73,14 @@
   ansible.builtin.file:
     path: ~/.config/sketchybar
     state: directory
-    mode: "0755"
+    mode: "0750"
   when: sketchybar_brew.changed or sketchybar_installed.rc == 0
 
 - name: Copy the configuration for Sketchybar
   ansible.builtin.copy:
     src: sketchy/
     dest: ~/.config/sketchybar
-    mode: "0644"
+    mode: "0640"
   register: sketchybar_config
   when: sketchybar_brew.changed or sketchybar_installed.rc == 0
 

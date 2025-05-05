@@ -18,5 +18,5 @@
   ansible.builtin.template:
     src: config.j2
     dest: ~/.gitconfig
-    mode: "0644"
+    mode: "0640"
   when: git_exists.rc == 0 or git_installed.changed

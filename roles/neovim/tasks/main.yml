@@ -18,21 +18,21 @@
   ansible.builtin.file:
     path: ~/.config/nvim
     state: directory
-    mode: "0755"
+    mode: "0750"
   when: neovim_exists.rc == 0 or neovim_installed.changed
 
 - name: Copy the init file for Neovim
   ansible.builtin.copy:
     src: init.lua
     dest: ~/.config/nvim/init.lua
-    mode: "0644"
+    mode: "0640"
   when: neovim_exists.rc == 0 or neovim_installed.changed
 
 - name: Copy the configuration for Neovim
   ansible.builtin.copy:
     src: lua/
     dest: ~/.config/nvim/lua
-    mode: "0644"
+    mode: "0640"
   when: neovim_exists.rc == 0 or neovim_installed.changed
 
 - name: Remove old packer configuration
@@ -52,11 +52,11 @@
   ansible.builtin.copy:
     src: vimrc
     dest: ~/.vimrc
-    mode: "0644"
+    mode: "0640"
   when: vim_exists.rc == 0
 
 - name: Copy the default Intellij vim configuration
   ansible.builtin.copy:
     src: ideavimrc
     dest: ~/.ideavimrc
-    mode: "0644"
+    mode: "0640"

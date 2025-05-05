@@ -25,5 +25,5 @@
   ansible.builtin.copy:
     src: btop.conf
     dest: ~/.config/btop/btop.conf
-    mode: "0644"
+    mode: "0640"
   when: btop_exists.rc == 0 or btop_installed.changed

@@ -15,5 +15,5 @@
   ansible.builtin.copy:
     src: files/com.googlecode.iterm2.plist
     dest: ~/Library/Preferences/com.googlecode.iterm2.plist
-    mode: "0644"
+    mode: "0640"
   when: iterm2_installed.stat.exists

@@ -49,14 +49,14 @@
   ansible.builtin.file:
     path: ~/.config/yabai
     state: directory
-    mode: "0755"
+    mode: "0750"
   when: yabai_brew.changed or yabai_installed.rc == 0
 
 - name: Copy yabai preferences
   ansible.builtin.copy:
     src: files/yabairc
     dest: ~/.config/yabai/yabairc
-    mode: "0644"
+    mode: "0640"
   when: yabai_brew.changed or yabai_installed.rc == 0
   register: yabai_config
 
