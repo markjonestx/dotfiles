@@ -1,3 +1,4 @@
+# vim: ft=zsh
 alias ls="$LSCMD --color=auto --classify"
 alias ll="ls -l"
 alias la="ls -la"
@@ -11,7 +12,7 @@ alias please=sudo
 alias gt=git
 alias grep="grep --color"
 
-{% if 'jlab.org' in ansible_hostname %}
+{% if 'jlab.org' in ansible_fqdn %}
 # Jlab Specific aliases
 alias electron="ssh electron.jlab.org"
 alias proxy_connect="ssh cni-adm2.jlab.org"
