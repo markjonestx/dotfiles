@@ -71,6 +71,7 @@ return {
                     'rust', 'python', 'go',
                     'yaml', 'json', 'puppet'
                 },
+                ignore_install = { 'org' },
                 auto_install = true,
                 highlight = {
                     enable = true,
