@@ -136,14 +136,15 @@ return {
     { 'hrsh7th/cmp-nvim-lsp' },
     {
         'williamboman/mason.nvim',
+        version = '^1.11',
         opts = {
             ui = {
                 border = 'rounded'
             }
         }
     },
-    { 'williamboman/mason-lspconfig.nvim' },
-    { 'neovim/nvim-lspconfig' },
+    { 'williamboman/mason-lspconfig.nvim', version = '^1' },
+    { 'neovim/nvim-lspconfig', version = '^1' },
     {
         'hrsh7th/nvim-cmp',
         dependencies = { 'VonHeikemen/lsp-zero.nvim' },
