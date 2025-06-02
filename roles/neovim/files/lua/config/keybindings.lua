@@ -20,9 +20,6 @@ keymap.set('n', '<leader>tu', vim.cmd.UndotreeToggle)
 
 -- Telescope
 keymap.set('n', '<leader><Space>', '<cmd>Telescope buffers<CR>')
-keymap.set('n', '<leader>org', '<cmd>ObsidianSearch<CR>')
-keymap.set('n', '<leader>ofd', '<cmd>ObsidianQuickSwitch<CR>')
-keymap.set('n', '<leader>otd', '<cmd>ObsidianToday<CR>')
 
 -- LSP
 keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
