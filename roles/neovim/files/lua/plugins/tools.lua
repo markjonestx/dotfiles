@@ -10,7 +10,11 @@ return {
             {
                 '<leader>noti',
                 '<cmd>lua require("telescope").extensions.notify.notify()<CR>'
-            }
+            },
+            {
+                '<leader>ca',
+                '<cmd>lua vim.lsp.buf.code_action()<CR>'
+            },
         },
         cmd = { 'Telescope' },
         opts = {
@@ -68,17 +72,6 @@ return {
 
             vim.api.nvim_create_autocmd('TextYankPost', {callback = copy})
         end,
-    },
-
-    -- Code Actions Menu
-    {
-        'aznhe21/actions-preview.nvim',
-        keys = { '<leader>ca' },
-        init = function()
-            vim.keymap.set(
-                { 'n' }, '<leader>ca', require('actions-preview').code_actions
-            )
-        end
     },
 
     -- Autosave
