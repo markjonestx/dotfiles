@@ -14,8 +14,8 @@ alias grep="grep --color"
 
 {% if 'jlab.org' in ansible_fqdn %}
 # Jlab Specific aliases
-alias electron="ssh electron.jlab.org"
-alias proxy_connect="ssh cni-adm2.jlab.org"
+alias electron="ssh -C electron.jlab.org"
+alias proxy_connect="ssh -C cni-adm2.jlab.org"
 {% endif %}
 
 if command -v batcat &> /dev/null; then
