@@ -152,12 +152,28 @@ return {
         'nvim-orgmode/orgmode',
         event = 'VeryLazy',
         ft = { 'org' },
-        config = function()
-            require('orgmode').setup({
-                org_agenda_files = '~/Desktop/orgfiles/**/*',
-                org_default_notes_file = '~/Desktop/orgfiles/refile.org',
-            })
-        end,
+        opts = {
+            org_agenda_files = '~/Desktop/orgfiles/**/*',
+            org_default_notes_file = '~/Desktop/orgfiles/refile.org',
+            mappings = {
+                org = {
+                    org_next_visible_heading = ',]',
+                    org_previous_visible_heading = ',]',
+                }
+            }
+        }
+    },
+    {
+        'nvim-orgmode/org-bullets.nvim',
+        dependencies = { 'nvim-orgmode/orgmode' },
+    },
+    {
+        'nvim-orgmode/telescope-orgmode.nvim',
+        depedencies = {
+            'nvim-orgmode/orgmode',
+            'nvim-telescope/telescope.nvim',
+        },
     }
+
 }
 
