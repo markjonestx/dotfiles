@@ -1,4 +1,5 @@
 local wezterm = require 'wezterm'
+local act = wezterm.action
 
 local config = {
     window_background_opacity = 0.9,
@@ -12,7 +13,7 @@ local config = {
     audible_bell = "Disabled",
 
     font = wezterm.font('ComicCodeLigatures Nerd Font'),
-    font_size = 10,
+    font_size = 12,
 
     enable_wayland = false,  -- Currently broken on Fedora
 
@@ -20,5 +21,16 @@ local config = {
         background= 'black',
     }
 }
+
+local is_darwin = function()
+    return wezterm.target_triple:find("darwin") ~= nil
+end
+
+if is_darwin() then
+    config.keys = {
+        { key = 'LeftArrow', mods = 'OPT', action = act.SendString '\x1bb' },
+        { key = 'RightArrow', mods = 'OPT', action = act.SendString '\x1bf' }
+    }
+end
 
 return config
