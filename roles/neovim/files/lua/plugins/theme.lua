@@ -34,6 +34,11 @@ return {
                         background = true,
                     },
                 },
+                lsp_trouble = true,
+                gitsigns = {
+                    enable = true,
+                    transparent = true
+                },
                 notify = true,
                 nvimtree = true,
                 treesitter = true,
