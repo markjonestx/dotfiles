@@ -2,156 +2,58 @@ return {
 
     -- LSP Configuration
     {
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v4.x',
-        event = 'VeryLazy',
+        'neovim/nvim-lspconfig',
+        lazy = false,
         dependencies = {
-            -- LSP Support
-            {'neovim/nvim-lspconfig'},             -- Required
-            {'williamboman/mason.nvim'},           -- Optional
-            {'williamboman/mason-lspconfig.nvim'}, -- Optional
-
-            -- Autocompletion
-            {'hrsh7th/nvim-cmp'},         -- Required
-            {'hrsh7th/cmp-nvim-lsp'},     -- Required
-
-            -- Snippets
-            {'L3MON4D3/LuaSnip'},             -- Required
+            {
+                'williamboman/mason.nvim',
+                opts = { ui = { border = 'rounded' } }
+            },
+            {
+                'williamboman/mason-lspconfig.nvim',
+                opts = { automatic_enable = true }
+            }
         },
-        init = function()
-            local lsp_zero = require('lsp-zero')
+        config = function()
             local lspconfig = require('lspconfig')
+            local lsputil = require('lspconfig.util')
             local mason_lsp = require('mason-lspconfig')
-            local cmp = require('cmp')
-            local lspkind = require('lspkind')
+            local mason_registry = require('mason-registry')
 
-            -- lsp configuration
-            lsp_zero.on_attach(function(client, bufnr)
-                lsp_zero.default_keymaps({buffer = bufnr})
-            end)
+            if not mason_registry.is_installed({'puppet-editor-services'}) then
+                if vim.fn.executable('puppet-languageserver') then
+                    vim.lsp.config('puppet', {
+                        cmd = { 'puppet-languageserver', '--stdio' },
+                        filetypes = { 'puppet' },
+                        root_dir = lsputil.root_pattern(unpack({ 'hiera.yaml', '.git' }))(),
+                        single_file_support = true
+                    })
+                    vim.lsp.enable('puppet')
+                end
+            end
 
-            lsp_zero.extend_lspconfig({
-                capabilities = require('cmp_nvim_lsp').default_capabilities(),
-                lsp_attach = lsp_attach,
-                float_border = 'rounded',
-                sign_text = true,
-            })
 
+            -- Use Mason to autoconfigure LSP without arguments
+            -- You can override options for a given LSP here
             mason_lsp.setup_handlers({
                 function(server_name)
                     lspconfig[server_name].setup({})
-                end,
+                end
             })
-
-            local has_words_before = function()
-              if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
-              local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
-              return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
-            end
-
-            cmp.setup({
-                window = {
-                    completion = {
-                        winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-                        col_offset = -3,
-                        side_padding = 0,
-                    },
-                    documentation = cmp.config.window.bordered()
-                },
-
-                formatting = {
-                    fields = { "kind", "abbr", "menu" },
-                    format = lspkind.cmp_format({
-                        mode = 'symbol_text',
-                        maxwidth = {
-                            menu = 50,
-                            abbr = 50
-                        },
-                        ellipsis_char = '...',
-                        show_labelDetails = true,
-                    })
-                },
-
-                sources = {
-                    {name = 'copilot'},
-                    {name = 'git'},
-                    {name = 'path'},
-                    {name = 'nvim_lsp'},
-                    {name = 'nvim_lua'},
-                    {name = 'orgmode'},
-                    {name = 'luasnip', keyword_length = 2},
-                    {name = 'buffer', keyword_length = 3},
-                },
-
-                mapping = cmp.mapping.preset.insert({
-                    -- Enter to confirm selection
-                    ['<CR>'] = cmp.mapping.confirm({
-                        select = false,
-                        behavior = cmp.ConfirmBehavior.Insert,
-                    }),
-
-                    -- Copilot Tab-to-complete
-                    ["<Tab>"] = vim.schedule_wrap(function(fallback)
-                        if cmp.visible() and has_words_before() then
-                            cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-                        else
-                            fallback()
-                        end
-                    end),
-
-                    -- Ctrl+Space to trigger menu
-                    ['<C-Space>'] = cmp.mapping.complete(),
-
-                    -- Navigate between snipplet placeholder
-                    ['<C-n>'] = lsp_zero.cmp_action().luasnip_jump_forward(),
-                    ['<C-p>'] = lsp_zero.cmp_action().luasnip_jump_backward(),
-
-                    -- Navigate the documentation
-                    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-                    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-                }),
-
-              sorting = {
-                    priority_weight = 2,
-                    comparators = {
-                       require("copilot_cmp.comparators").prioritize,
-
-                       -- Below is the default comparitor list and order for nvim-cmp
-                       cmp.config.compare.offset,
-                       -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
-                       cmp.config.compare.exact,
-                       cmp.config.compare.score,
-                       cmp.config.compare.recently_used,
-                       cmp.config.compare.locality,
-                       cmp.config.compare.kind,
-                       cmp.config.compare.sort_text,
-                       cmp.config.compare.length,
-                       cmp.config.compare.order,
-                    },
-              },
-            })
-
         end
     },
-    { 'hrsh7th/cmp-nvim-lsp' },
-    {
-        'williamboman/mason.nvim',
-        version = '^1.11',
-        opts = {
-            ui = {
-                border = 'rounded'
-            }
-        }
-    },
-    { 'williamboman/mason-lspconfig.nvim', version = '^1' },
-    { 'neovim/nvim-lspconfig', version = '^1' },
+
+    -- Autocompletion
     {
         'hrsh7th/nvim-cmp',
-        dependencies = { 'VonHeikemen/lsp-zero.nvim' },
-        event = 'InsertEnter',
-        config = function()
-        end,
-        init = function()
+        event = "InsertEnter",
+        dependencies = {
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/cmp-buffer',
+            'hrsh7th/cmp-path',
+            'L3MON4D3/LuaSnip',
+        },
+        init = function ()
             -- Customization for Pmenu (cmp)
             local set_hl = vim.api.nvim_set_hl
             set_hl(0, "PmenuSel", { bg = "#282C34", fg = "NONE" })
@@ -193,10 +95,91 @@ return {
             set_hl(0, "CmpItemKindInterface", { fg = "#D8EEEB", bg = "#58B5A8" })
             set_hl(0, "CmpItemKindColor", { fg = "#D8EEEB", bg = "#58B5A8" })
             set_hl(0, "CmpItemKindTypeParameter", { fg = "#D8EEEB", bg = "#58B5A8" })
+        end,
+        opts = function ()
+            local cmp = require('cmp')
+            local lspkind = require('lspkind')
+            local luasnip = require('luasnip')
+
+
+            local has_words_before = function()
+              if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+              local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
+              return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+            end
+
+            return {
+                window = {
+                    completion = {
+                        winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+                        col_offset = -3,
+                        side_padding = 0,
+                    },
+                    documentation = cmp.config.window.bordered()
+                },
+
+                formatting = {
+                    fields = { "kind", "abbr", "menu" },
+                    format = lspkind.cmp_format({
+                        mode = 'symbol_text',
+                        maxwidth = {
+                            menu = 50,
+                            abbr = 50
+                        },
+                        ellipsis_char = '...',
+                        show_labelDetails = true,
+                    })
+                },
+
+                sources = {
+                    {name = 'git'},
+                    {name = 'path'},
+                    {name = 'nvim_lsp'},
+                    {name = 'nvim_lua'},
+                    {name = 'orgmode'},
+                    {name = 'luasnip', keyword_length = 2},
+                    {name = 'buffer', keyword_length = 3},
+                },
+
+                mapping = cmp.mapping.preset.insert({
+                    -- Enter to confirm selection
+                    ['<CR>'] = cmp.mapping.confirm({
+                        select = false,
+                        behavior = cmp.ConfirmBehavior.Insert,
+                    }),
+
+                    -- Ctrl+Space to trigger menu
+                    ['<C-Space>'] = cmp.mapping.complete(),
+
+                    -- Navigate between snipplet placeholder
+                    --['<C-n>'] = luasnip.jump(1),
+                    --['<C-p>'] = luasnip.jump(-1),
+
+
+                    -- Navigate the documentation
+                    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+                    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+                }),
+
+              sorting = {
+                  priority_weight = 2,
+                  comparators = {
+                     -- Below is the default comparitor list and order for nvim-cmp
+                     cmp.config.compare.offset,
+                     -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+                     cmp.config.compare.exact,
+                     cmp.config.compare.score,
+                     cmp.config.compare.recently_used,
+                     cmp.config.compare.locality,
+                     cmp.config.compare.kind,
+                     cmp.config.compare.sort_text,
+                     cmp.config.compare.length,
+                     cmp.config.compare.order,
+                  },
+              },
+            }
         end
     },
-    { 'L3MON4D3/LuaSnip' },
-
 
     -- Git Completions
     {
@@ -216,21 +199,5 @@ return {
             table.insert(require("cmp").get_config().sources, { name = "git" })
         end
     },
-
-    -- Nvim Code Actions Menu, deprecated
-    -- { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu' },
-
-
-
-    -- Github Copilot, for intelligent autofill- where it makes sense
-    {
-        'zbirenbaum/copilot.lua',
-        cmd = { 'Copilot' },
-        opts = {
-            suggestion = { enabled = false },
-            panel = { enabled = false },
-        }
-    },
-    { 'zbirenbaum/copilot-cmp' },
 
 }

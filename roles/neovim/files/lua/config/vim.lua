@@ -60,7 +60,7 @@ vim.cmd([[
 vim.cmd([[
     augroup puppetFile
         autocmd!
-        autocmd FileType puppet setlocal shiftwidth=2
+        autocmd FileType puppet setlocal shiftwidth=2 colorcolumn=100
     augroup END
 ]])
 

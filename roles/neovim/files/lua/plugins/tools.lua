@@ -113,6 +113,17 @@ return {
         end,
     },
 
+    -- Code Actions Menu
+--    {
+--        'aznhe21/actions-preview.nvim',
+--        keys = { '<leader>ca' },
+--        init = function()
+--            vim.keymap.set(
+--                { 'n' }, '<leader>ca', require('actions-preview').code_actions
+--            )
+--        end
+--    },
+
     -- Autosave
     { "Pocco81/auto-save.nvim", event = 'InsertEnter' },
 
