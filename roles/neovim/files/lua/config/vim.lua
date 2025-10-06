@@ -93,6 +93,12 @@ vim.cmd([[
     augroup END
 ]])
 
+vim.cmd([[
+    augroup typstFile
+        autocmd!
+        autocmd FileType typst setlocal colorcolumn& wrap linebreak columns=100
+    augroup END
+]])
 
 vim.cmd([[
     if has("persistent_undo")

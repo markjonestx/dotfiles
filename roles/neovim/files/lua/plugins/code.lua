@@ -14,33 +14,6 @@ return {
                 opts = { automatic_enable = true }
             }
         },
-        config = function()
-            local lspconfig = require('lspconfig')
-            local lsputil = require('lspconfig.util')
-            local mason_lsp = require('mason-lspconfig')
-            local mason_registry = require('mason-registry')
-
-            if not mason_registry.is_installed({'puppet-editor-services'}) then
-                if vim.fn.executable('puppet-languageserver') then
-                    vim.lsp.config('puppet', {
-                        cmd = { 'puppet-languageserver', '--stdio' },
-                        filetypes = { 'puppet' },
-                        root_dir = lsputil.root_pattern(unpack({ 'hiera.yaml', '.git' }))(),
-                        single_file_support = true
-                    })
-                    vim.lsp.enable('puppet')
-                end
-            end
-
-
-            -- Use Mason to autoconfigure LSP without arguments
-            -- You can override options for a given LSP here
-            mason_lsp.setup_handlers({
-                function(server_name)
-                    lspconfig[server_name].setup({})
-                end
-            })
-        end
     },
 
     -- Autocompletion
@@ -200,4 +173,18 @@ return {
         end
     },
 
+    -- Typist Support
+    {
+        'chomosuke/typst-preview.nvim',
+        lazy = true,
+        ft = 'typst',
+        version = '1.*',
+        opts = {
+            open_cmd = 'flatpak run org.mozilla.firefox %s --class typist-preview',
+            dependencies_bin = {
+                ['tinymist'] = 'tinymist',
+                ['websocat'] = 'websocat'
+            },
+        }
+    }
 }

@@ -13,6 +13,12 @@ keymap.set('n', '<C-w>s', '<C-w>s<C-w>j')
 -- Improved wordwrap
 keymap.set('n', 'k', 'v:count == 0 ? "gk" : "k"', { expr = true, silent = true })
 keymap.set('n', 'j', 'v:count == 0 ? "gj" : "j"', { expr = true, silent = true })
+keymap.set('n', '^', 'v:count == 0 ? "g^" : "^"', { expr = true, silent = true })
+keymap.set('n', '$', 'v:count == 0 ? "g$" : "$"', { expr = true, silent = true })
+keymap.set('n', '<Up>', 'v:count == 0 ? "gk" : "<Up>"', { expr = true, silent = true })
+keymap.set('n', '<Down>', 'v:count == 0 ? "gj" : "<Down>"', { expr = true, silent = true })
+keymap.set('i', '<Up>', 'v:count == 0 ? "<C-o>gk" : "<Up>"', { expr = true, silent = true })
+keymap.set('i', '<Down>', 'v:count == 0 ? "<C-o>gj" : "<Down>"', { expr = true, silent = true })
 
 -- NvimTree and Undotree
 keymap.set('n', '<leader>tt', '<cmd>NvimTreeToggle<CR>')
