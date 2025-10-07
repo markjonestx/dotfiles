@@ -14,6 +14,22 @@ return {
                 opts = { automatic_enable = true }
             }
         },
+        init = function ()
+            local lsps = {
+                { server = 'clangd',        exec = 'clangd' },
+                { server = 'gopls',         exec = 'gopls' },
+                { server = 'rust_analyzer', exec = 'rust-analyzer' },
+                { server = 'puppet',        exec = 'puppet-editor-services' },
+                { server = 'ltex_plus',     exec = 'ltex-ls-plus' },
+                { server = 'tinymist',      exec = 'tinymist' }
+            }
+
+            for _, lsp in ipairs(lsps) do
+                if vim.fn.executable(lsp.exec) == 1 then
+                    vim.lsp.enable(lsp.server)
+                end
+            end
+        end
     },
 
     -- Autocompletion
