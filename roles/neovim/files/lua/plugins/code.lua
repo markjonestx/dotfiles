@@ -53,10 +53,19 @@ return {
 
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+            local ansible_roots = {
+                'galaxy.yaml',
+                'ansible.cfg',
+                '.ansible-lint',
+                '.git'
+            }
+
             if compat.nvim_011 then
                 vim.lsp.config("*", { capabilities = capabilities })
 
                 require('mason-lspconfig').setup(opts)
+
+                vim.lsp.config('ansiblels', { root_markers = ansible_roots })
                 return
             end
 
@@ -72,16 +81,21 @@ return {
                 end
             end
 
-             require('mason-lspconfig').setup({
+            require('mason-lspconfig').setup({
                 ensure_installed = legacy_baseline,
 
                 handlers = {
                     function(server)
-                        lspconfig[server].setup({ capabilities = capabilities })
+                        local lsp_opts = { capabilities = capabilities }
+
+                        if server == 'ansiblels' then
+                            lsp_opts.root_dir = util.root_pattern(ansible_roots)
+                        end
+
+                        lspconfig[server].setup(lsp_opts)
                     end
                 }
             })
-
         end,
     },
 
@@ -100,7 +114,7 @@ return {
             'petertriho/cmp-git',
         },
 
-        init = function ()
+        init = function()
             -- Customization for Pmenu (cmp)
             local set_hl = vim.api.nvim_set_hl
             set_hl(0, "PmenuSel", { bg = "#282C34", fg = "NONE" })
@@ -144,7 +158,7 @@ return {
             set_hl(0, "CmpItemKindTypeParameter", { fg = "#D8EEEB", bg = "#58B5A8" })
         end,
 
-        opts = function ()
+        opts = function()
             local cmp = require('cmp')
             local lspkind = require('lspkind')
 
@@ -201,20 +215,20 @@ return {
                     ['<C-d>'] = cmp.mapping.scroll_docs(4),
                 }),
 
-              sorting = {
-                  priority_weight = 2,
-                  comparators = {
-                     cmp.config.compare.offset,
-                     cmp.config.compare.exact,
-                     cmp.config.compare.sort_text,
-                     cmp.config.compare.score,
-                     cmp.config.compare.recently_used,
-                     cmp.config.compare.locality,
-                     cmp.config.compare.kind,
-                     cmp.config.compare.length,
-                     cmp.config.compare.order,
-                  },
-              },
+                sorting = {
+                    priority_weight = 2,
+                    comparators = {
+                        cmp.config.compare.offset,
+                        cmp.config.compare.exact,
+                        cmp.config.compare.sort_text,
+                        cmp.config.compare.score,
+                        cmp.config.compare.recently_used,
+                        cmp.config.compare.locality,
+                        cmp.config.compare.kind,
+                        cmp.config.compare.length,
+                        cmp.config.compare.order,
+                    },
+                },
             }
         end,
 
