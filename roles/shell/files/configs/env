@@ -15,6 +15,11 @@ pathadd "${HOME}/.fzf/bn"
 pathadd "/opt/homebrew/bin"
 pathadd "${HOME}/.local/share/Jetbrains/Toolbox/scripts"
 
+# Set us up for NIX
+if [ -S /nix/var/nix/daemon-socket/socket ]; then
+    export NIX_REMOTE=daemon
+fi
+
 if [ -d "$HOME/.cargo" ]; then
     . "$HOME/.cargo/env"
 fi
