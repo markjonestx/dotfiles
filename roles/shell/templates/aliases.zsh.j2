@@ -13,10 +13,17 @@ alias gt=git
 alias grep="grep --color"
 
 {% if 'jlab.org' in ansible_facts["fqdn"] %}
+
 # Jlab Specific aliases
 alias electron="ssh -C electron.jlab.org"
 alias proxy_connect="ssh -C cni-adm2.jlab.org"
+
 {% endif %}
+
+# If we're in Kitty and we're on the host (not a container)
+if [[ "${TERM-}" == xterm-kitty ]] && command -v kitten >/dev/null; then
+    alias ssh='kitten ssh'
+fi
 
 if command -v batcat &> /dev/null; then
     alias bat=batcat
