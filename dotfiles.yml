@@ -33,6 +33,9 @@
       when: ansible_facts['os_family'] != 'Darwin'
       tags: i3
 
+    - role: kitty
+      tags: kitty
+
     - role: rofi
       when: ansible_facts['os_family'] != 'Darwin'
       tags: rofi

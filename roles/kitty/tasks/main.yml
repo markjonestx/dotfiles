@@ -1,0 +1,36 @@
+# vim: ft=yaml.ansible
+---
+- name: Check if kitty is installed
+  ansible.builtin.command:
+    cmd: kitty --version
+  register: kitty_exists
+  changed_when: false
+  ignore_errors: true
+
+- name: Install Kitty
+  ansible.builtin.package:
+    name: kitty
+    state: present
+  when: kitty_exists.rc != 0 and use_sudo
+  register: kitty_installed
+
+- name: Create the kitty configuration directory
+  ansible.builtin.file:
+    path: ~/.config/kitty
+    state: directory
+    mode: "0750"
+  when: kitty_exists.rc == 0 or kitty_installed.changed
+
+- name: Copy the Catpuccin Theme for Kitty
+  ansible.builtin.copy:
+    src: catppuccin.conf
+    dest: ~/.config/kitty/catppuccin.conf
+    mode: "0640"
+  when: kitty_exists.rc == 0 or kitty_installed.changed
+
+- name: Copy the configuration for Kitty
+  ansible.builtin.copy:
+    src: kitty.conf
+    dest: ~/.config/kitty/kitty.conf
+    mode: "0640"
+  when: kitty_exists.rc == 0 or kitty_installed.changed
