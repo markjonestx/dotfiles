@@ -19,6 +19,7 @@
       in
       {
         devShells.default = pkgs.mkShell {
+          name = "ansible-dotfiles";
           buildInputs = with pkgs; [
             ansible
             ansible-lint
