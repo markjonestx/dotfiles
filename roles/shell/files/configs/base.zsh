@@ -22,6 +22,10 @@ if command -v direnv > /dev/null; then
     eval "$(direnv hook zsh)"
 fi
 
+if command -v rbenv > /dev/null; then
+    eval "$(rbenv init - --no-rehash zsh)"
+fi
+
 # Force emcas (default) over vim
 bindkey -e
 
