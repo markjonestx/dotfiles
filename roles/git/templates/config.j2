@@ -1,41 +1,42 @@
+# vim: tabstop=4 shiftwidth=4 expandtab:
 [user]
-	name = Mark Jones
+    name = Mark Jones
 {% if ansible_facts['fqdn'].endswith('jlab.org') %}
-	email = maj@jlab.org
+    email = maj@jlab.org
 {% else %}
-	email = markjonestx@live.com
+    email = markjonestx@live.com
 {% endif %}
 
 [color]
-	status = auto
-	branch = auto
-	interactive = auto
-	diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+    diff = auto
 
 [github]
-	user = markjonestx
+    user = markjonestx
 
 [init]
-	defaultBranch = main
+    defaultBranch = main
 
 [alias]
-	lg = log --color --graph --pretty=format:'%Cred%G? %Cgreen%h:%Cblue %ar by %an <%ae> %Creset%n%B'
-	amend = commit --amend --reset-author
+    lg = log --color --graph --pretty=format:'%Cred%G? %Cgreen%h:%Cblue %ar by %an <%ae> %Creset%n%B'
+    amend = commit --amend --reset-author
 
-	ss = status -s
-	rs = reset
+    ss = status -s
+    rs = reset
 
-	c = commit
-	a = add
-	aa = add -A
+    c = commit
+    a = add
+    aa = add -A
 
-	co = checkout
-	cob = checkout -b
+    co = checkout
+    cob = checkout -b
 
-	pl = pull --rebase
-	ps = push
+    pl = pull --rebase
+    ps = push
     psf = push --force-with-lease
 
-	stage = add -N
+    stage = add -N
     nuke = reset --hard
     yolo = push --force
