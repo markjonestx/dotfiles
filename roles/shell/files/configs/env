@@ -1,14 +1,6 @@
 # vim: syntax=bash
-# Because TMUX can break things
-if [ $TERM = tmux-256color ]; then
-    if ! infocmp tmux-256color >/dev/null 2>&1; then
-        export TERM='xterm-256color'
-    fi
-fi
-
 
 # PATH configuration
-
 pathadd() {
     if [ -d "$(readlink -f $1)" ] && [[ ":$PATH:" != *":$(readlink -f $1):"* ]]; then
         PATH="${PATH:+"$PATH:"}$1"
