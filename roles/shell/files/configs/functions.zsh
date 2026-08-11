@@ -59,7 +59,7 @@ edit() {
     fi
 }
 
-function fzf-history() {
+function fhistory() {
     history 0 | fzf --tac --no-sort --no-multi --ansi
 }
 

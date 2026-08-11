@@ -18,11 +18,21 @@ SAVEHIST=2500
 
 PROMPT='%F{green}%*%f %F{magenta}${(%):-%m}%f %F{blue}%~%f $ '
 
+if command -v direnv > /dev/null; then
+    eval "$(direnv hook zsh)"
+fi
+
 # Force emcas (default) over vim
 bindkey -e
 
-# Powerlevel10k and Antidote requires a ZSH >= 5.01
+# Antidote requires a ZSH >= 5.01
 if [[ "$(echo $ZSH_VERSION | awk -F. '{ printf("%d%03d", $1,$2)}')" -ge 5001 ]]; then
+
+    # Tell Spaceship where to load the configuration from
+    export SPACESHIP_CONFIG="${HOME}/.shell.d/spaceship.zsh"
+    if [[ -f "${HOME}/.shell.d/custom_spaceship_plugins.zsh" ]]; then
+        source "${HOME}/.shell.d/custom_spaceship_plugins.zsh"
+    fi
 
     # Setup Antidote and it's plugins
     zsh_plugins=$HOME/.shell.d/zsh_plugins
@@ -42,22 +52,6 @@ if [[ "$(echo $ZSH_VERSION | awk -F. '{ printf("%d%03d", $1,$2)}')" -ge 5001 ]];
     source $zsh_plugins_path
     export HASANTIDOTE=true
 
-    # Required for instantaneous prompt
-    if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-        source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-    fi
-
-    # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-    if [[ "$TERM" = "linux" ]]; then
-        source "$HOME/.shell.d/p10k_fb_configuration"
-    else
-        source "$HOME/.shell.d/p10k_xterm_configuration"
-    fi
-fi
-
-# Add support for iterm2 if the system has it installed
-if [ -f "${HOME}/.iterm2_shell_integration.zsh" ]; then
-    source "${HOME}/.iterm2_shell_integration.zsh"
 fi
 
 # Saving my home folder from all the ZCompDumps

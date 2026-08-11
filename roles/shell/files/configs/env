@@ -6,80 +6,40 @@ if [ $TERM = tmux-256color ]; then
     fi
 fi
 
-# Fix some settings on OpenBSD
-if [ "$(uname -s)" = "OpenBSD" ]; then
-    export LC_ALL=en_US.UTF-8
-    export LANG=en_US.UTF-8
-fi
 
-# Fixing up the PATH
-if [[ ! $HOSTNAME = kube* ]]; then
-    if [ -d "/apps/sudo/bin" ]; then
-        export PATH=/apps/sudo/bin:$PATH
+# PATH configuration
+
+pathadd() {
+    if [ -d "$(readlink -f $1)" ] && [[ ":$PATH:" != *":$(readlink -f $1):"* ]]; then
+        PATH="${PATH:+"$PATH:"}$1"
     fi
-fi
+}
 
-if [ -d "$HOME/.local/bin" ]; then
-    export PATH=$HOME/.local/bin:$PATH
-fi
-
-# "Standard" way
-if [ -d "/opt/go/bin" ]; then
-    export PATH=/opt/go/bin:$PATH
-fi
-
-# JLab way
-if [ -d "/local/scratch/$USER/go/bin" ]; then
-    export PATH=/local/scratch/$USER/go/bin:$PATH
-fi
-
-if [ -d "$HOME/.local/go/bin" ]; then
-    export PATH=$HOME/.local/go/bin:$PATH
-fi
-
-if command -v go &> /dev/null; then
-    export GOPATH=$HOME/.local/go_binaries
-    export PATH=$GOPATH:$PATH
-
-    if [ ! -d "${GOPATH}" ]; then
-        mkdir $GOPATH
-    fi
-fi
-
-# Use the system set Java (Fixes maven)
-if command -v javac &> /dev/null; then
-    export JAVA_HOME="${$(readlink -f $(which javac))%/*/*}"
-fi
+pathadd "${HOME}/.local/bin"
+pathadd "/opt/go/bin"
+pathadd "${HOME}/go/bin"
+pathadd "${HOME}/.local/go/bin"
+pathadd "${HOME}/.fzf/bn"
+pathadd "/opt/homebrew/bin"
+pathadd "${HOME}/.local/share/Jetbrains/Toolbox/scripts"
 
 if [ -d "$HOME/.cargo" ]; then
     . "$HOME/.cargo/env"
 fi
 
-if [ -d "$HOME/.fzf" ]; then
-    export PATH="$PATH:$HOME/.fzf/bin"
-fi
-
-if [ -d "/opt/homebrew/bin" ]; then
-    export PATH="$PATH:/opt/homebrew/bin"
-fi
-
-if [[ -d "$HOME/.local/share/Jetbrains/Toolbox/scripts" ]]; then
-    export PATH="$PATH:$HOME/.local/share/Jetbrains/Toolbox/scripts"
-fi
-
 # Setup Editor
-if [ "$TERM" = "linux" ]; then
-    export EDITOR=$(which vim)
-elif command -v nvim &> /dev/null; then
+if command -v nvim &> /dev/null; then
     export EDITOR=$(which nvim)
     export MANPAGER="${EDITOR} +Man!"
     alias vim=nvim
-else
+elif command -v vim &> /dev/null; then
     echo "Warning- VIM"
     export EDITOR=$(which vim)
     if command -v bat &> /dev/null; then
         export MANPAGER="sh -c 'col -bx | bat -l man -p'"
     fi
+else
+    echo "ERROR- No text editor found!"
 fi
 
 # FZF setup
@@ -95,11 +55,13 @@ export FZF_DEFAULT_OPTS=" \
 
 # LS setup
 if command -v lsd &> /dev/null; then
-    if [ "$TERM" = "linux" ] || [ "$TERM" = "tmux" ]; then
+
+    if [ "$TERM" = "linux" ]; then
         export LSCMD='lsd --icon=never'
     else
         export LSCMD='lsd'
     fi
+
 elif command -v gls &> /dev/null; then
     export LSCMD='gls'
 else

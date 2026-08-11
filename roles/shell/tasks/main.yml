@@ -4,7 +4,7 @@
   ansible.builtin.copy:
     src: configs/
     dest: ~/.shell.d/
-    mode: "0750"
+    mode: "0640"
 
 - name: Copy aliases over to the configuration directory
   ansible.builtin.template:
@@ -31,14 +31,14 @@
     mode: "0640"
 
 - name: Copy over the BASHRC file
-  when: '"bash" in ansible_user_shell'
+  when: '"bash" in ansible_facts["user_shell"]'
   ansible.builtin.copy:
     src: bashrc
     dest: ~/.bashrc
     mode: "0640"
 
 - name: Copy over the BASH Profile file
-  when: '"bash" in ansible_user_shell'
+  when: '"bash" in ansible_facts["user_shell"]'
   ansible.builtin.copy:
     src: bash_profile
     dest: ~/.bash_profile

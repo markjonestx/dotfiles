@@ -12,7 +12,7 @@ alias please=sudo
 alias gt=git
 alias grep="grep --color"
 
-{% if 'jlab.org' in ansible_fqdn %}
+{% if 'jlab.org' in ansible_facts["fqdn"] %}
 # Jlab Specific aliases
 alias electron="ssh -C electron.jlab.org"
 alias proxy_connect="ssh -C cni-adm2.jlab.org"
