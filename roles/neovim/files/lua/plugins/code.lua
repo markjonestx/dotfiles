@@ -1,47 +1,105 @@
+-- There are some big changes between neovim 0.10 and 0.12. EL10 defaults
+-- to 0.10, and I have our EL9 servers on 0.10 as well.
+
+local compat = require('config.compat')
+
+-- Set the highest version (nil for latest)
+local mason_version
+local mason_lsp_config_version
+local lspconfig_version
+
+if not compat.nvim_011 then
+    mason_version = 'v1.11.0'
+    mason_lsp_config_version = 'v1.32.0'
+    lspconfig_version = 'v1.8.0'
+end
+
 return {
 
     -- LSP Configuration
     {
-        'neovim/nvim-lspconfig',
+        'mason-org/mason-lspconfig.nvim',
         lazy = false,
+
+        version = mason_lsp_config_version,
+
         dependencies = {
             {
-                'williamboman/mason.nvim',
-                opts = { ui = { border = 'rounded' } }
+                'mason-org/mason.nvim',
+                version = mason_version,
+                opts = {
+                    ui = { border = 'rounded' },
+                    install_root_dir = vim.fn.stdpath('data') .. '/mason-' .. compat.profile,
+                }
             },
+
             {
-                'williamboman/mason-lspconfig.nvim',
-                opts = { automatic_enable = true }
-            }
+                'neovim/nvim-lspconfig',
+                version = lspconfig_version
+            },
+
+            'hrsh7th/cmp-nvim-lsp'
         },
-        init = function ()
-            local lsps = {
-                { server = 'clangd',        exec = 'clangd' },
-                { server = 'gopls',         exec = 'gopls' },
-                { server = 'rust_analyzer', exec = 'rust-analyzer' },
-                { server = 'puppet',        exec = 'puppet-editor-services' },
-                { server = 'ltex_plus',     exec = 'ltex-ls-plus' },
-                { server = 'tinymist',      exec = 'tinymist' }
+
+        config = function()
+            local opts = {
+                automatic_enable = true,
+                ensure_installed = {
+                    -- devops
+                    'bashls',
+                    'jsonls',
+                },
             }
 
-            for _, lsp in ipairs(lsps) do
-                if vim.fn.executable(lsp.exec) == 1 then
-                    vim.lsp.enable(lsp.server)
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+            if compat.nvim_011 then
+                vim.lsp.config("*", { capabilities = capabilities })
+
+                require('mason-lspconfig').setup(opts)
+                return
+            end
+
+            -- Legacy LSP configuration
+
+            local lspconfig = require('lspconfig')
+
+            -- ltex_plus isn't in this older Mason
+            local legacy_baseline = {}
+            for _, server in ipairs(opts.ensure_installed) do
+                if server ~= 'ltex_plus' then
+                    table.insert(legacy_baseline, server)
                 end
             end
-        end
+
+             require('mason-lspconfig').setup({
+                ensure_installed = legacy_baseline,
+
+                handlers = {
+                    function(server)
+                        lspconfig[server].setup({ capabilities = capabilities })
+                    end
+                }
+            })
+
+        end,
     },
+
 
     -- Autocompletion
     {
         'hrsh7th/nvim-cmp',
         event = "InsertEnter",
+
         dependencies = {
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-path',
-            'L3MON4D3/LuaSnip',
+            'onsails/lspkind.nvim',
+            'hrsh7th/cmp-nvim-lua',
+            'petertriho/cmp-git',
         },
+
         init = function ()
             -- Customization for Pmenu (cmp)
             local set_hl = vim.api.nvim_set_hl
@@ -85,19 +143,18 @@ return {
             set_hl(0, "CmpItemKindColor", { fg = "#D8EEEB", bg = "#58B5A8" })
             set_hl(0, "CmpItemKindTypeParameter", { fg = "#D8EEEB", bg = "#58B5A8" })
         end,
+
         opts = function ()
             local cmp = require('cmp')
             local lspkind = require('lspkind')
-            local luasnip = require('luasnip')
-
-
-            local has_words_before = function()
-              if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
-              local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
-              return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
-            end
 
             return {
+                snippet = {
+                    expand = function(args)
+                        vim.snippet.expand(args.body)
+                    end,
+                },
+
                 window = {
                     completion = {
                         winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
@@ -120,15 +177,14 @@ return {
                     })
                 },
 
-                sources = {
-                    {name = 'git'},
-                    {name = 'path'},
-                    {name = 'nvim_lsp'},
-                    {name = 'nvim_lua'},
-                    {name = 'orgmode'},
-                    {name = 'luasnip', keyword_length = 2},
-                    {name = 'buffer', keyword_length = 3},
-                },
+                sources = cmp.config.sources({
+                    { name = 'nvim_lsp' },
+                    { name = 'path' },
+                    { name = 'nvim_lua' },
+                    { name = 'git' },
+                }, {
+                    { name = 'buffer', keyword_length = 3 }
+                }),
 
                 mapping = cmp.mapping.preset.insert({
                     -- Enter to confirm selection
@@ -140,11 +196,6 @@ return {
                     -- Ctrl+Space to trigger menu
                     ['<C-Space>'] = cmp.mapping.complete(),
 
-                    -- Navigate between snipplet placeholder
-                    --['<C-n>'] = luasnip.jump(1),
-                    --['<C-p>'] = luasnip.jump(-1),
-
-
                     -- Navigate the documentation
                     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
                     ['<C-d>'] = cmp.mapping.scroll_docs(4),
@@ -153,46 +204,40 @@ return {
               sorting = {
                   priority_weight = 2,
                   comparators = {
-                     -- Below is the default comparitor list and order for nvim-cmp
                      cmp.config.compare.offset,
-                     -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
                      cmp.config.compare.exact,
+                     cmp.config.compare.sort_text,
                      cmp.config.compare.score,
                      cmp.config.compare.recently_used,
                      cmp.config.compare.locality,
                      cmp.config.compare.kind,
-                     cmp.config.compare.sort_text,
                      cmp.config.compare.length,
                      cmp.config.compare.order,
                   },
               },
             }
-        end
-    },
+        end,
 
-    -- Git Completions
-    {
-        "petertriho/cmp-git",
-        dependencies = { 'hrsh7th/nvim-cmp' },
-        lazy = false,
-        opts = {
-            gitlab = {
-                hosts = {
-                    'https://git.arasaka.sh',
-                    'https://gitlab.jlab.org',
-                    'https://code.jlab.org'
-                },
-            },
-        },
-        init = function()
-            table.insert(require("cmp").get_config().sources, { name = "git" })
+        config = function(_, opts)
+            local cmp = require('cmp')
+
+            cmp.setup(opts)
+
+            require('cmp_git').setup({
+                gitlab = {
+                    hosts = {
+                        'https://git.frappe.coffee',
+                        'https://gitlab.jlab.org',
+                        'https://code.jlab.org'
+                    }
+                }
+            })
         end
     },
 
     -- Typist Support
     {
         'chomosuke/typst-preview.nvim',
-        lazy = true,
         ft = 'typst',
         version = '1.*',
         opts = {

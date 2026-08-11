@@ -1,8 +1,25 @@
+local compat = require('config.compat')
+
+local telescope_tag
+local telescope_version
+
+if not compat.nvim_011 then
+    telescope_tag = '0.1.8'
+else
+    telescope_version = '*'
+end
+
 return {
     -- Telescope
     {
-        'nvim-telescope/telescope.nvim', tag = '0.1.8',
-        dependencies = { {'nvim-lua/plenary.nvim'} },
+        'nvim-telescope/telescope.nvim',
+
+        tag = telescope_tag,
+        version = telescope_version,
+
+        cmd = { 'Telescope' },
+        dependencies = { 'nvim-lua/plenary.nvim' },
+
         keys = {
             { '<leader>fd', '<cmd>Telescope fd<CR>' },
             { '<leader>rg', '<cmd>Telescope live_grep<CR>' },
@@ -11,27 +28,32 @@ return {
                 '<leader>noti',
                 '<cmd>lua require("telescope").extensions.notify.notify()<CR>'
             },
-            {
-                '<leader>ca',
-                '<cmd>lua vim.lsp.buf.code_action()<CR>'
-            },
         },
-        cmd = { 'Telescope' },
+
         opts = {
             pickers = {
                 find_files = {
                     hidden = true,
                 },
             },
-        }
+        },
+
+        config = function(_, opts)
+            local telescope = require('telescope')
+
+            telescope.setup(opts)
+
+            telescope.load_extension('notify')
+        end
     },
-    { 'nvim-lua/plenary.nvim' },
+
 
     -- Trouble for Errors
     {
       "folke/trouble.nvim",
-      opts = {}, -- for default options, refer to the configuration section for custom setup.
+      opts = {},
       cmd = "Trouble",
+
       keys = {
         {
           "<leader>xx",
@@ -70,13 +92,18 @@ return {
     {
         "nvim-tree/nvim-tree.lua",
         lazy = false,
+
         dependencies = { 'nvim-tree/nvim-web-devicons' },
+
         init = function()
             vim.g.loaded_netrw = 1
             vim.g.loaded_netrwPlugin = 1
         end,
+
         opts = {
-            sort_by = "case_sensitive",
+            sort = {
+                sorter = "case_sensitive",
+            },
             view = {
                 width = 30,
             },
@@ -85,55 +112,27 @@ return {
             }
         }
     },
-    { 'nvim-tree/nvim-web-devicons' },
 
     -- Undo Tree, to make my life easier
     {
         'mbbill/undotree',
         keys = {
-            { '<leader>tu', vim.cmd.UndotreeToggle }
+            { '<leader>tu', '<cmd>UndotreeToggle<cr>' }
         }
     },
 
-    {
-        'ojroques/nvim-osc52',
-        enabled = vim.fn.has('nvim-0.10.0') ~= 1,
-        init = function()
-            require('osc52').setup {
-                tmux_passthrough = true,
-            }
-
-            function copy()
-              if vim.v.event.operator == 'y' and vim.v.event.regname == '+' then
-                require('osc52').copy_register('+')
-              end
-            end
-
-            vim.api.nvim_create_autocmd('TextYankPost', {callback = copy})
-        end,
-    },
-
-    -- Code Actions Menu
---    {
---        'aznhe21/actions-preview.nvim',
---        keys = { '<leader>ca' },
---        init = function()
---            vim.keymap.set(
---                { 'n' }, '<leader>ca', require('actions-preview').code_actions
---            )
---        end
---    },
-
     -- Autosave
-    { "Pocco81/auto-save.nvim", event = 'InsertEnter' },
+    { "Pocco81/auto-save.nvim", event = 'InsertEnter', opts = {} },
 
     -- Autotrim whitespaces and excess newlines
     {
         'cappyzawa/trim.nvim',
         event = 'InsertEnter',
+
         opts = {
             trim_last_line = false,
             trim_first_line = false,
+            trim_current_line = false
         },
     },
 
@@ -141,6 +140,7 @@ return {
     {
         'folke/which-key.nvim',
         event = "VeryLazy",
+
         keys = {
             {
                 "<leader>?",
@@ -153,38 +153,68 @@ return {
     },
 
     -- Fugitive for git integration
-    { 'tpope/vim-fugitive', cmd = {'Git'} },
+    { 'tpope/vim-fugitive', cmd = { 'Git' } },
 
     -- Automatic Indentation
-    { 'nmac427/guess-indent.nvim', lazy = false },
-
-    -- OrgMode
     {
-        'nvim-orgmode/orgmode',
-        event = 'VeryLazy',
-        ft = { 'org' },
+        'nmac427/guess-indent.nvim',
+
+        event = { 'BufReadPre', 'BufNewFile' },
+
+        opts = {}
+    },
+
+    -- Image support
+    {
+        '3rd/image.nvim',
+        build = false,
         opts = {
-            org_agenda_files = '~/Desktop/orgfiles/**/*',
-            org_default_notes_file = '~/Desktop/orgfiles/refile.org',
-            mappings = {
-                org = {
-                    org_next_visible_heading = ',]',
-                    org_previous_visible_heading = ',]',
+            processor = 'magick_cli'
+        }
+    },
+
+    {
+        'r-pletnev/pdfreader.nvim',
+        lazy = false,
+
+        dependencies = {
+            'folke/snacks.nvim',
+            'nvim-telescope/telescope.nvim'
+        },
+
+        opts = {}
+    },
+
+    -- Snack's menu for Code Actions
+    {
+        'folke/snacks.nvim',
+        priority = 1000,
+        lazy = false,
+
+        keys = {
+            {
+              "<leader>ca",
+              vim.lsp.buf.code_action,
+              desc = "Display Code Actions",
+            },
+        },
+
+        opts = {
+            picker = {
+                enabled = true,
+                ui_select = true,
+
+                layouts = {
+                    select = {
+                        layout = {
+                            relative = 'cursor',
+                            row = 1,
+                            width = 70,
+                            min_width = 0,
+                        }
+                    }
                 }
             }
         }
-    },
-    {
-        'nvim-orgmode/org-bullets.nvim',
-        dependencies = { 'nvim-orgmode/orgmode' },
-    },
-    {
-        'nvim-orgmode/telescope-orgmode.nvim',
-        depedencies = {
-            'nvim-orgmode/orgmode',
-            'nvim-telescope/telescope.nvim',
-        },
     }
-
 }
-
