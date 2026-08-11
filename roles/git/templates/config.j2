@@ -5,32 +5,37 @@
 {% else %}
 	email = markjonestx@live.com
 {% endif %}
+
 [color]
 	status = auto
 	branch = auto
 	interactive = auto
 	diff = auto
+
 [github]
 	user = markjonestx
+
 [init]
 	defaultBranch = main
+
 [alias]
 	lg = log --color --graph --pretty=format:'%Cred%G? %Cgreen%h:%Cblue %ar by %an <%ae> %Creset%n%B'
 	amend = commit --amend --reset-author
+
 	ss = status -s
+	rs = reset
+
+	c = commit
 	a = add
 	aa = add -A
-	c = commit
+
 	co = checkout
 	cob = checkout -b
+
 	pl = pull --rebase
 	ps = push
     psf = push --force-with-lease
-	m = merge --no-ff
-	ms = merge --squash
+
+	stage = add -N
     nuke = reset --hard
     yolo = push --force
-	wkls = worktree list
-	wkadd = worktree add
-	wkrm = worktree remove
-	wkclean = worktree prune
