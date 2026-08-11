@@ -122,7 +122,7 @@ return {
     },
 
     -- Autosave
-    { "Pocco81/auto-save.nvim", event = 'InsertEnter', opts = {} },
+    { "Pocco81/auto-save.nvim", event = 'InsertEnter' },
 
     -- Autotrim whitespaces and excess newlines
     {
