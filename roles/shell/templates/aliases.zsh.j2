@@ -20,11 +20,6 @@ alias proxy_connect="ssh -C cni-adm2.jlab.org"
 
 {% endif %}
 
-# If we're in Kitty and we're on the host (not a container)
-if [[ "${TERM-}" == xterm-kitty ]] && command -v kitten >/dev/null; then
-    alias ssh='kitten ssh'
-fi
-
 if command -v batcat &> /dev/null; then
     alias bat=batcat
 fi
