@@ -29,28 +29,28 @@
       tags: tmux
 
     # Setup Desktop environment
-    - role: i3
-      when: ansible_facts['os_family'] != 'Darwin'
-      tags: i3
+#    - role: i3
+#      when: ansible_facts['os_family'] != 'Darwin'
+#      tags: i3
 
     - role: kitty
       tags: kitty
 
-    - role: rofi
-      when: ansible_facts['os_family'] != 'Darwin'
-      tags: rofi
+#    - role: rofi
+#      when: ansible_facts['os_family'] != 'Darwin'
+#      tags: rofi
 
-    - role: wezterm
-      tags: wezterm
+#    - role: wezterm
+#      tags: wezterm
 
-    - role: iterm2
-      when: ansible_facts['os_family'] == 'Darwin'
-      tags: iterm2
+#    - role: iterm2
+#      when: ansible_facts['os_family'] == 'Darwin'
+#      tags: iterm2
 
-    - role: yabai
-      when: ansible_facts['os_family'] == 'Darwin'
-      tags: yabai
+#    - role: yabai
+#      when: ansible_facts['os_family'] == 'Darwin'
+#      tags: yabai
 
-    - role: skhd
-      when: ansible_facts['os_family'] == 'Darwin'
-      tags: skhd
+#    - role: skhd
+#      when: ansible_facts['os_family'] == 'Darwin'
+#      tags: skhd
