@@ -38,6 +38,11 @@ return {
                 version = lspconfig_version
             },
 
+            {
+                'rxbn/kube-schema.nvim',
+                ft = 'yaml'
+            },
+
             'hrsh7th/cmp-nvim-lsp'
         },
 
@@ -65,7 +70,49 @@ return {
 
                 require('mason-lspconfig').setup(opts)
 
+                -- Add additional ansible hints
                 vim.lsp.config('ansiblels', { root_markers = ansible_roots })
+
+                -- Kube Schema requires Neovim 0.11+
+                local ks = require('kube-schema')
+                ks.setup({
+                    notifications = false,
+                    openshift = true,
+                    openshift_schema_dir = 'v4.20-standalone-strict',
+                })
+
+                vim.lsp.config(
+                    "yamlls",
+                    ks.configure_yamlls({
+                        settings = {
+                            redhat = {
+                                telemetry = {
+                                    enabled = false,
+                                }
+                            },
+
+                            yaml = {
+                                validate = true,
+                                hover = true,
+                                completion = true,
+
+                                format = {
+                                    enable = true,
+                                },
+
+                                schemaStore = {
+                                    enable = true,
+                                },
+
+                                kubernetesCRDStore = {
+                                    enable = true,
+                                    url = "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main",
+                                },
+                            },
+                        },
+                    })
+                )
+
                 return
             end
 
@@ -88,6 +135,7 @@ return {
                     function(server)
                         local lsp_opts = { capabilities = capabilities }
 
+                        -- Add additional ansible hints
                         if server == 'ansiblels' then
                             lsp_opts.root_dir = util.root_pattern(ansible_roots)
                         end
@@ -261,5 +309,5 @@ return {
                 ['websocat'] = 'websocat'
             },
         }
-    }
+    },
 }
