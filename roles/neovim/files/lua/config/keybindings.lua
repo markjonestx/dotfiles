@@ -37,7 +37,7 @@ keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
 keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')
 keymap.set('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
 keymap.set('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.format { async = true }<CR>')
+keymap.set('n', '<leader>ft', '<cmd>lua vim.lsp.buf.format { async = true }<CR>')
 
 -- Diagnostics
 keymap.set('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
