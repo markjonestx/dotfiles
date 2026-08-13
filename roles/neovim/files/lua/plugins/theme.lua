@@ -90,13 +90,50 @@ return {
                 local treesitter = require('nvim-treesitter')
 
                 treesitter.setup({ install_dir = parser_dir })
-
                 treesitter.install(treesitter_parsers)
 
-                vim.api.nvim_create_autocmd("FileType", {
+                local available = {}
+                for _, lang in ipairs(treesitter.get_available()) do
+                    available[lang] = true
+                end
+
+                vim.api.nvim_create_autocmd('FileType', {
                     pattern = '*',
+
+                    -- Hook to run on every opened file
                     callback = function(args)
-                        pcall(vim.treesitter.start, args.buf)
+                        local filetype = vim.bo[args.buf].filetype
+                        local lang = vim.treesitter.language.get_lang(
+                            filetype
+                        )
+
+                        -- Quit early if TS can't handle this filetype
+                        if not lang or not available[lang] then
+                            return
+                        end
+
+                        if vim.treesitter.language.add(lang) then
+                            pcall(vim.treesitter.start, args.buf, lang)
+                            return
+                        end
+
+                        -- Install if it's not found, with async nonsense
+                        treesitter.install({ lang }):await(function(err, inst)
+                            if err or not inst then
+                                return
+                            end
+
+                            vim.schedule(function()
+                                local valid_buf = vim.api.nvim_buf_is_valid(args.buf)
+                                local is_filetype = vim.bo[args.buf].filetype ~= filetype
+
+                                if not (vaild_buf or filetype) then
+                                    return
+                                end
+
+                                pcall(vim.treesitter.start, buf, lang)
+                            end)
+                        end)
                     end
                 })
 
@@ -140,7 +177,7 @@ return {
         enabled = compat.nvim_011,
 
         lazy = false,
-        opts = { autocmd = { enabled = true }}
+        opts = { autocmd = { enabled = true } }
     },
 
     -- Gitsigns for git integration
