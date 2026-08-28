@@ -47,6 +47,10 @@ return {
         },
 
         config = function()
+            local local_lsps = {
+                puppet = 'openvox-languageserver'
+            }
+
             local opts = {
                 automatic_enable = true,
                 ensure_installed = {
@@ -57,6 +61,15 @@ return {
             }
 
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+            local puppet_roots = {
+                'Puppetfile',
+                'environment.conf',
+                '.git',
+                'metadata.json',
+                'hiera.yml',
+                'manifests'
+            }
 
             local ansible_roots = {
                 'galaxy.yaml',
@@ -70,8 +83,20 @@ return {
 
                 require('mason-lspconfig').setup(opts)
 
-                -- Add additional ansible hints
+                -- Local LSPs
+                for server, executable in pairs(local_lsps) do
+                    if vim.fn.executable(executable) == 1 then
+                        vim.lsp.enable(server)
+                    end
+                end
+
+                -- Add additional hints
                 vim.lsp.config('ansiblels', { root_markers = ansible_roots })
+                vim.lsp.config('puppet',    {
+                    -- OpenVox renamed it
+                    cmd = { 'openvox-languageserver', '--stdio' },
+                    root_markers = puppet_roots
+                })
 
                 -- Kube Schema requires Neovim 0.11+
                 local ks = require('kube-schema')
@@ -135,15 +160,28 @@ return {
                     function(server)
                         local lsp_opts = { capabilities = capabilities }
 
-                        -- Add additional ansible hints
+                        -- Add additional hints
                         if server == 'ansiblels' then
                             lsp_opts.root_dir = util.root_pattern(ansible_roots)
+                        elseif server == 'puppet' then
+                            lsp_opts.cmd = { 'openvox-languageserver', '--stdio' }
+                            lsp_opts.root_dir = util.root_pattern(puppet_roots)
                         end
 
                         lspconfig[server].setup(lsp_opts)
                     end
                 }
             })
+
+            -- Locally installed LSPs
+            for server, executable in pairs(local_lsps) do
+                if vim.fn.executable(executable) == 1 then
+                    lspconfig[server].setup({
+                        capabilities = capabilities
+                    })
+                end
+            end
+
         end,
     },
 
@@ -295,6 +333,17 @@ return {
                 }
             })
         end
+    },
+
+    -- Better Puppet Support
+    {
+        'rodjek/vim-puppet',
+        ft = 'puppet',
+
+        init = function()
+            -- LSP does this
+            vim.g.puppet_display_errors = 0
+        end,
     },
 
     -- Typist Support
