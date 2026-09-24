@@ -17,6 +17,9 @@ alias grep="grep --color"
 # Jlab Specific aliases
 alias electron="ssh -C electron.jlab.org"
 alias proxy_connect="ssh -C cni-adm2.jlab.org"
+alias gglab="GITLAB_HOST=gitlab.com glab"
+alias jglab="HTTPS_PROXY=socks5h://localhost:3186 GITLAB_HOST=gitlab.jlab.org glab"
+alias cglab="HTTPS_PROXY=socks5h://localhost:3186 GITLAB_HOST=code.jlab.org glab"
 
 {% endif %}
 
