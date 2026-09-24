@@ -164,7 +164,10 @@ return {
         'rcarriga/nvim-notify',
         lazy = false,
 
-        opts = { background_colour = "#000000" },
+        opts = {
+            background_colour = "#000000",
+            top_down = false,
+        },
 
         config = function(_, opts)
             local notify = require('notify')
