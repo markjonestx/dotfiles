@@ -143,13 +143,13 @@ return {
 
                             vim.schedule(function()
                                 local valid_buf = vim.api.nvim_buf_is_valid(args.buf)
-                                local is_filetype = vim.bo[args.buf].filetype ~= filetype
+                                local is_filetype = vim.bo[args.buf].filetype == filetype
 
-                                if not (vaild_buf or filetype) then
+                                if not (valid_buf and is_filetype) then
                                     return
                                 end
 
-                                pcall(vim.treesitter.start, buf, lang)
+                                pcall(vim.treesitter.start, args.buf, lang)
                             end)
                         end)
                     end
