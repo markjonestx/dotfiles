@@ -216,5 +216,28 @@ return {
                 }
             }
         }
+    },
+
+    -- Todo Comments
+    {
+        'folke/todo-comments.nvim',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        lazy = false,
+        keys = {
+            { '<leader>td', '<cmd>TodoTelescope<CR>', desc = 'Search TODOs' },
+            { '<leader>xt', '<cmd>TodoTrouble<CR>', desc = 'Show TODOs in Trouble' },
+        },
+        opts = {
+            signs = true,
+
+            gui_style = {
+                fg = 'BOLD',
+                bg = 'BOLD',
+            },
+
+            highlight = {
+                keyword = 'wide',
+            },
+        }
     }
 }
