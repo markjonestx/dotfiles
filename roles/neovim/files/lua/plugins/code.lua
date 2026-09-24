@@ -54,9 +54,13 @@ return {
             local opts = {
                 automatic_enable = true,
                 ensure_installed = {
-                    -- devops
+                    -- DevOps
                     'bashls',
                     'jsonls',
+
+                    -- Grammar language Server
+                    'harper_ls',
+                    'vale_ls'
                 },
             }
 
@@ -136,6 +140,61 @@ return {
                             },
                         },
                     })
+                )
+
+                vim.lsp.config(
+                    'harper_ls',
+                    {
+                        root_dir = function(bufnr, on_dir)
+                            if vim.fs.root(bufnr, { '.vale.ini' }) then
+                                return
+                            end
+
+                            local root = vim.fs.root(
+                                bufnr,
+                                {
+                                    '.harper-dictionary.txt',
+                                    '.git'
+                                }
+                            )
+
+                            if root then
+                                on_dir(root)
+                            end
+                        end,
+
+                        settings = {
+                            ['harper-ls'] = {
+                                dialect = 'American',
+                                diagnosticSeverity = 'hint',
+                                linters = {
+                                    SpellCheck = true,
+                                    SentenceCapitalization = true,
+                                    UnclosedQuotes = true,
+                                    AnA = true,
+                                    LongSentences = true,
+                                    RepeatedWords = true,
+                                    Spaces = true,
+                                    OxfordComma = true,
+                                    NoOxfordComma = false,
+                                    LongSentences = false,
+                                    BoringWords = false,
+                                    SpelledNumbers = false,
+                                    DotInitialisms = false,
+                                    ExpandMemoryShorthands = false,
+                                },
+                            }
+                        }
+                    }
+                )
+
+                vim.lsp.config(
+                    'vale_ls',
+                    {
+                        root_markers = {
+                            '.vale.ini'
+                        }
+                    }
                 )
 
                 return

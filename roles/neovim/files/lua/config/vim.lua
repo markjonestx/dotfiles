@@ -21,8 +21,9 @@ set.signcolumn = "yes"
 vim.updatetime = 250
 set.timeoutlen = 300
 set.termguicolors = true
-set.spell = true
+set.spell = false
 set.spelllang = "en_us"
+vim.opt_local.spelloptions:append("camel")
 
 
 vim.cmd([[
