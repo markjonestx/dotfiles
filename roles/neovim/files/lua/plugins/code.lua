@@ -279,6 +279,7 @@ return {
 
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp' },
+                    { name = 'copilot' },
                     { name = 'path' },
                     { name = 'nvim_lua' },
                     { name = 'git' },
@@ -306,6 +307,7 @@ return {
                     comparators = {
                         cmp.config.compare.offset,
                         cmp.config.compare.exact,
+                        require('copilot_cmp.comparators').prioritize,
                         cmp.config.compare.sort_text,
                         cmp.config.compare.score,
                         cmp.config.compare.recently_used,
@@ -359,4 +361,33 @@ return {
             },
         }
     },
+
+    -- Copilot Things
+    {
+        "zbirenbaum/copilot.lua",
+        cmd = "Copilot",
+        event = "InsertEnter",
+
+        opts = {
+            auth_provider_url = 'https://jeffersonlab.ghe.com/',
+
+            suggestion = {
+                enabled = false,
+            },
+            panel = {
+                enabled = false,
+            },
+        },
+    },
+
+    {
+        "zbirenbaum/copilot-cmp",
+        event = 'InsertEnter',
+
+        dependencies = {
+            "zbirenbaum/copilot.lua",
+        },
+
+        opts = {},
+    }
 }
