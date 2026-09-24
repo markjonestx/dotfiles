@@ -87,7 +87,9 @@ return {
         build = ':TSUpdate',
 
         config = function()
-            local parser_dir = vim.fn.stdpath('data') .. '/treesitter-' .. compat.profile
+            local parser_dir = vim.fn.stdpath('data')
+            .. '/treesitter-'
+            .. compat.profile
 
             if compat.nvim_012 then
                 local treesitter = require('nvim-treesitter')
@@ -106,9 +108,12 @@ return {
                     -- Hook to run on every opened file
                     callback = function(args)
                         local filetype = vim.bo[args.buf].filetype
-                        local lang = vim.treesitter.language.get_lang(
-                            filetype
-                        )
+
+                        -- Use vim-puppet syntax highlighting instead
+                        if filetype == 'puppet' then
+                            return
+                        end
+
                         local lang = vim.treesitter.language.get_lang(filetype)
 
                         -- Quit early if TS can't handle this filetype
@@ -163,8 +168,10 @@ return {
 
                 ensure_installed = treesitter_parsers,
                 auto_install = true,
-                highlight = { enable = true, },
-                additional_vim_regex_highlighting = false,
+                highlight = {
+                    enable = true,
+                    disable = { 'puppet' },
+                },
                 additional_vim_regex_highlighting = { 'helm' },
             })
         end,
