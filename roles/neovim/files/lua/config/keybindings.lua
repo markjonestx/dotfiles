@@ -5,8 +5,6 @@ keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 keymap.set({ 'n', 'v' }, '<C-u>', '<C-u>zz')
 keymap.set({ 'n', 'v' }, '<C-d>', '<C-d>zz')
 keymap.set('x', 'p', '"_dP')
-keymap.set({ 'n', 'v' }, '<leader>x', '"_x')
-keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
 keymap.set('n', '<C-w>v', '<C-w>v<C-w>l')
 keymap.set('n', '<C-w>s', '<C-w>s<C-w>j')
 
