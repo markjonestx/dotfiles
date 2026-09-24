@@ -109,6 +109,7 @@ return {
                         local lang = vim.treesitter.language.get_lang(
                             filetype
                         )
+                        local lang = vim.treesitter.language.get_lang(filetype)
 
                         -- Quit early if TS can't handle this filetype
                         if not lang or not available[lang] then
@@ -116,7 +117,16 @@ return {
                         end
 
                         if vim.treesitter.language.add(lang) then
-                            pcall(vim.treesitter.start, args.buf, lang)
+                            if pcall(vim.treesitter.start, args.buf, lang) then
+                                if filetype == 'helm' then
+                                    vim.bo[args.buf].syntax = 'ON'
+
+                                    vim.api.nvim_buf_call(args.buf, function()
+                                        vim.cmd('syntax spell notoplevel')
+                                    end)
+                                end
+                            end
+
                             return
                         end
 
@@ -155,6 +165,7 @@ return {
                 auto_install = true,
                 highlight = { enable = true, },
                 additional_vim_regex_highlighting = false,
+                additional_vim_regex_highlighting = { 'helm' },
             })
         end,
     },
@@ -191,5 +202,12 @@ return {
         'lewis6991/gitsigns.nvim',
         event = { 'BufReadPre', 'BufNewFile' },
         opts = {},
+    },
+
+    -- Better Helm
+    {
+        'towolf/vim-helm',
+        lazy = true,
+        ft = 'helm'
     },
 }
