@@ -160,6 +160,47 @@ return {
     -- Fugitive for git integration
     { 'tpope/vim-fugitive', cmd = { 'Git' } },
 
+    -- Gitsigns for git integration
+    {
+        'lewis6991/gitsigns.nvim',
+        event = { 'BufReadPre', 'BufNewFile' },
+        keys = {
+            {
+                "<leader>gh",
+                "<cmd>Gitsigns stage_hunk<cr>",
+                desc = "Stage Hunk (Gitsigns)",
+            },
+            {
+                "<leader>gy",
+                "<cmd>Gitsigns reset_hunk<cr>",
+                desc = "Reset Hunk (Gitsigns)",
+            },
+            {
+                "<leader>gs",
+                "<cmd>Gitsigns stage_buffer<cr>",
+                desc = "Stage Buffer (Gitsigns)",
+            },
+            {
+                "<leader>gr",
+                "<cmd>Gitsigns reset_buffer<cr>",
+                desc = "Reset Buffer (Gitsigns)",
+            },
+            {
+                "<leader>gd",
+                "<cmd>Gitsigns diff<cr>",
+                desc = "Diff (Gitsigns)",
+            },
+            {
+                "<leader>gb",
+                "<cmd>Gitsigns blame<cr>",
+                desc = "Blame (Gitsigns)",
+            },
+        },
+        opts = {
+            current_line_blame = true,
+        },
+    },
+
     -- Automatic Indentation
     {
         'nmac427/guess-indent.nvim',

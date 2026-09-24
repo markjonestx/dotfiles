@@ -204,13 +204,6 @@ return {
         opts = { autocmd = { enabled = true } }
     },
 
-    -- Gitsigns for git integration
-    {
-        'lewis6991/gitsigns.nvim',
-        event = { 'BufReadPre', 'BufNewFile' },
-        opts = {},
-    },
-
     -- Better Helm
     {
         'towolf/vim-helm',
