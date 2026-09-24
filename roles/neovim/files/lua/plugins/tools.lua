@@ -101,6 +101,11 @@ return {
         end,
 
         opts = {
+            actions = {
+                open_file = {
+                    resize_window = false
+                },
+            },
             sort = {
                 sorter = "case_sensitive",
             },
