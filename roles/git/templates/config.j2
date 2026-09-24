@@ -1,4 +1,4 @@
-# vim: tabstop=4 shiftwidth=4 expandtab:
+# vim: ft=gitconfig tabstop=4 shiftwidth=4 expandtab:
 [user]
     name = Mark Jones
 {% if ansible_facts['fqdn'].endswith('jlab.org') %}
@@ -7,36 +7,92 @@
     email = markjonestx@live.com
 {% endif %}
 
+[branch]
+    sort = -committerdate
+
+[core]
+    pager = bat
+
 [color]
-    status = auto
-    branch = auto
-    interactive = auto
-    diff = auto
+    ui = auto
+
+[diff]
+    algorithm = histogram
+    colorMoved = zebra
+    colorMovedWs = allow-indentation-change
+
+[fetch]
+    prune = true
+    writeCommitGraph = true
+
+[gc]
+    reflogExpireUnreachable = 90 days
 
 [github]
     user = markjonestx
 
+[commit]
+    verbose = true
+
 [init]
     defaultBranch = main
 
+[pull]
+    rebase = true
+
+[push]
+    default = current
+    autoSetupRemote = true
+    useForceIfIncludes = true
+
+[merge]
+    ff = only
+    confictStyle = zdiff3
+
+[rebase]
+    autoSquash = true
+    updateRefs = true
+    missingCommitsCheck = error
+    rescheduleFailedExec = true
+
+[rerere]
+    enabled = true
+
+[stash]
+    showPatch = true
+    showIncludedUntracked = true
+    includeUntracked = true
+
+[tag]
+    sort = version:refname
+
 [alias]
     lg = log --color --graph --pretty=format:'%Cred%G? %Cgreen%h:%Cblue %ar by %an <%ae> %Creset%n%B'
-    amend = commit --amend --reset-author
-
+    blg = log --color --graph --pretty=format:'%Cred%G? %Cgreen%h:%Cblue %ar by %an <%ae> %Creset%n%B' origin/HEAD..HEAD
+    rblg = log --reverse --color --pretty=format:'%Cred%G? %Cgreen%h:%Cblue %ar by %an <%ae> %Creset%n%B' --decorate origin/HEAD..HEAD
+    review = log --reverse --find-renames --color --pretty=format:'%Cred%G? %Cgreen%h:%Cblue %ar by %an <%ae> %Creset%n%B' --patch origin/HEAD..HEAD
     ss = status -s
-    rs = reset
 
     c = commit
+    amend = commit --amend --reset-author
+    fixup = commit --fixup
+
     a = add
     aa = add -A
+    stage = add -N
 
-    co = checkout
-    cob = checkout -b
+    sw = switch
+    swc = switch -c
 
-    pl = pull --rebase
+    pl = pull
     ps = push
     psf = push --force-with-lease
 
-    stage = add -N
-    nuke = reset --hard
-    yolo = push --force
+    rs = reset
+    discard = reset --hard @{upstream}
+    rebuild = reset --mixed @{upstream}
+
+    rd = range-diff
+
+    clean-branches = "!f() { git branch --merged | grep -v '*' | xargs git branch -d; }; f"
+    clean-branches-force = "!f() { git branch --merged | grep -v '*' | xargs git branch -D; }; f"
