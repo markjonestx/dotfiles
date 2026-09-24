@@ -21,12 +21,12 @@ fcd() {
     local dir
     if [[ -n $1 ]]; then
         if [[ -n $2 ]]; then
-            dir=$(fd . $1 -t d --full-path | $PFZF -q $2 --prompt "Select directory: ")
+            dir=$(fd . $1 -t d --full-path -L | $PFZF -q $2 --prompt "Select directory: ")
         else
-            dir=$(fd . $1 -t d --full-path | $PFZF --prompt "Select directory: ")
+            dir=$(fd . $1 -t d --full-path -L | $PFZF --prompt "Select directory: ")
         fi
     else
-        dir=$(fd -t d | $PFZF --prompt "Select directory: ")
+        dir=$(fd -t d -L | $PFZF --prompt "Select directory: ")
     fi
 
 
